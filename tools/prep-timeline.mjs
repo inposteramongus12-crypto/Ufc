@@ -12,6 +12,9 @@ import {FPS, ROOT, decodePcm, readJson, say} from './lib.mjs';
 const linesFile = process.argv[2] ?? 'src/story/lines.json';
 const outFile = process.argv[3] ?? 'src/story/timeline.json';
 const lines = readJson(linesFile);
+// src/story/gaps.json: {id: seconds} of extra silence after a line (title card, rewind, flash...), added on top of the usual air
+const gapsFile = 'src/story/gaps.json';
+const extra = fs.existsSync(path.join(ROOT, gapsFile)) ? readJson(gapsFile) : {};
 // several takes of one line may exist (free voice, ElevenLabs take a): the newest file wins
 const clip = (id) => {
 	const found = [`${id}.mp3`, `${id}_a.mp3`, `${id}.wav`]
@@ -48,7 +51,7 @@ for (const l of lines) {
 	a1 = Math.min(env.length - 1, a1 + 3);
 	if (l.cut) a1 = Math.min(a1, a0 + Math.round(l.cut * FPS));
 	const dur = a1 - a0 + 1;
-	const gap = Math.round((l.gap ?? (l.sp === 'N' ? 0.35 : 0.25)) * FPS);
+	const gap = Math.round(((l.gap ?? (l.sp === 'N' ? 0.35 : 0.25)) + (typeof extra[l.id] === 'number' ? extra[l.id] : 0)) * FPS);
 	out.push({
 		id: l.id,
 		sp: l.sp,
