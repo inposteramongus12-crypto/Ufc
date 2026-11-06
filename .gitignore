@@ -1,0 +1,14 @@
+node_modules/
+out/
+.env
+.env.*
+*.key
+*.pem
+*secret*
+*token*
+
+# собирается make-sound (около 99 МБ), в репозиторий не кладём
+public/sfx/bed.wav
+public/sfx/bed_short.wav
+public/vo_en/fit/
+out/en/
