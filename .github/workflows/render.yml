@@ -13,7 +13,7 @@ on:
         required: true
         default: Long
       range:
-        description: 'Диапазон: lines:001-025 (номера реплик) или frames:0-3212 (кадры). Long весь ролик: lines:001-175; Short весь ролик: lines:001-011 (номера реплик шортса)'
+        description: 'Диапазон: lines:001-025 (номера реплик) или frames:0-3212 (кадры). Long весь ролик: lines:001-126; Short весь ролик: lines:001-011 (номера реплик шортса)'
         required: true
         default: 'lines:001-025'
       chunk:

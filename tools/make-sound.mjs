@@ -314,7 +314,10 @@ const stepsAt = (t0, dur, amp = 0.15, pan = 0) => {
 	}
 };
 for (const a of SPEC.ambience ?? []) {
-	const t0 = tAt(a.from) - 0.2, t1 = tEnd(a.to);
+	// from/to are line ids; fromEnd starts at the END of line `from` (for the pauses after a line), toEnd stops at the end of line `to`;
+	// shift moves the start (seconds, default −0.2 s before the line, +0.05 s after a line end)
+	const t0 = (a.fromEnd ? te(String(a.from).slice(0, 3)) : tAt(a.from)) + (a.shift ?? (a.fromEnd ? 0.05 : -0.2));
+	const t1 = a.toEnd ? te(String(a.to).slice(0, 3)) + 0.05 : tEnd(a.to);
 	if (a.kind === 'rain') rain(t0, t1, a.gain ?? 0.05);
 	else if (a.kind === 'sea' || a.kind === 'surf') sea(t0, t1, a.gain ?? 0.06);
 	else if (a.kind === 'wind') wind(t0, t1, a.gain ?? 0.05);

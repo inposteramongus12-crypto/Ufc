@@ -1,0 +1,1346 @@
+{
+ "_comment": "Музыки нет (как в ролике №2). from/to — id реплик; fromEnd — с конца реплики, toEnd — до конца; at+off — реплика и кадры от её начала. Вжухи и щелчки счётчика берутся из auto-cues.json, паузы из gaps.json (тихий эмбиент на 071, 108, 111, 115, 126; повтор хука 121+100 зеркалит начало).",
+ "ambience": [
+  {
+   "from": "start",
+   "to": "002",
+   "kind": "crowd",
+   "gain": 0.06,
+   "shift": 0
+  },
+  {
+   "from": "002",
+   "to": "005",
+   "kind": "crowd",
+   "gain": 0.04
+  },
+  {
+   "from": "005",
+   "to": "013",
+   "kind": "room",
+   "gain": 0.05
+  },
+  {
+   "from": "013",
+   "to": "018",
+   "kind": "crowd",
+   "gain": 0.05
+  },
+  {
+   "from": "018",
+   "to": "031",
+   "kind": "room",
+   "gain": 0.05
+  },
+  {
+   "from": "031",
+   "to": "034",
+   "kind": "hall",
+   "gain": 0.05
+  },
+  {
+   "from": "034",
+   "to": "039",
+   "kind": "room",
+   "gain": 0.05
+  },
+  {
+   "from": "039",
+   "to": "040",
+   "kind": "street",
+   "gain": 0.05
+  },
+  {
+   "from": "040",
+   "to": "041",
+   "kind": "room",
+   "gain": 0.05
+  },
+  {
+   "from": "041",
+   "to": "046",
+   "kind": "crowd",
+   "gain": 0.035
+  },
+  {
+   "from": "046",
+   "to": "047",
+   "kind": "room",
+   "gain": 0.04
+  },
+  {
+   "from": "047",
+   "to": "053",
+   "kind": "hall",
+   "gain": 0.04
+  },
+  {
+   "from": "053",
+   "to": "063",
+   "kind": "room",
+   "gain": 0.05
+  },
+  {
+   "from": "063",
+   "to": "064",
+   "kind": "street",
+   "gain": 0.06
+  },
+  {
+   "from": "064",
+   "to": "066",
+   "kind": "room",
+   "gain": 0.05
+  },
+  {
+   "from": "066",
+   "to": "067",
+   "kind": "hall",
+   "gain": 0.04
+  },
+  {
+   "from": "067",
+   "to": "069",
+   "kind": "room",
+   "gain": 0.04
+  },
+  {
+   "from": "069",
+   "to": "071",
+   "kind": "street",
+   "gain": 0.06
+  },
+  {
+   "from": "071",
+   "to": "072",
+   "kind": "room",
+   "gain": 0.012
+  },
+  {
+   "from": "072",
+   "to": "079",
+   "kind": "night",
+   "gain": 0.045
+  },
+  {
+   "from": "079",
+   "to": "085",
+   "kind": "night",
+   "gain": 0.05
+  },
+  {
+   "from": "085",
+   "to": "086",
+   "kind": "night",
+   "gain": 0.02
+  },
+  {
+   "from": "086",
+   "to": "091",
+   "kind": "room",
+   "gain": 0.03
+  },
+  {
+   "from": "091",
+   "to": "096",
+   "kind": "night",
+   "gain": 0.04
+  },
+  {
+   "from": "096",
+   "to": "100",
+   "kind": "room",
+   "gain": 0.035
+  },
+  {
+   "from": "100",
+   "to": "102",
+   "kind": "hall",
+   "gain": 0.04
+  },
+  {
+   "from": "102",
+   "to": "107",
+   "kind": "crowd",
+   "gain": 0.05
+  },
+  {
+   "from": "107",
+   "to": "108",
+   "kind": "crowd",
+   "gain": 0.08,
+   "toEnd": true
+  },
+  {
+   "from": "108",
+   "to": "109",
+   "kind": "crowd",
+   "gain": 0.012,
+   "fromEnd": true
+  },
+  {
+   "from": "109",
+   "to": "111",
+   "kind": "crowd",
+   "gain": 0.08,
+   "toEnd": true
+  },
+  {
+   "from": "111",
+   "to": "112",
+   "kind": "crowd",
+   "gain": 0.012,
+   "fromEnd": true
+  },
+  {
+   "from": "112",
+   "to": "115",
+   "kind": "crowd",
+   "gain": 0.09,
+   "toEnd": true
+  },
+  {
+   "from": "115",
+   "to": "116",
+   "kind": "crowd",
+   "gain": 0.01,
+   "fromEnd": true
+  },
+  {
+   "from": "116",
+   "to": "121",
+   "kind": "crowd",
+   "gain": 0.08,
+   "toEnd": true
+  },
+  {
+   "from": "121",
+   "to": "124",
+   "kind": "crowd",
+   "gain": 0.06,
+   "fromEnd": true,
+   "shift": 0.2
+  },
+  {
+   "from": "124",
+   "to": "126",
+   "kind": "crowd",
+   "gain": 0.03,
+   "toEnd": true
+  },
+  {
+   "from": "126",
+   "to": "end",
+   "kind": "fridge",
+   "gain": 0.012,
+   "fromEnd": true
+  }
+ ],
+ "music": [],
+ "sfx": [
+  {
+   "at": "start",
+   "off": 0,
+   "type": "buzz",
+   "dur": 8,
+   "amp": 0.01
+  },
+  {
+   "at": "002",
+   "off": 0,
+   "type": "ding",
+   "amp": 0.1
+  },
+  {
+   "at": "002",
+   "off": 20,
+   "type": "switch"
+  },
+  {
+   "at": "004",
+   "off": 0,
+   "type": "whooshUp",
+   "dur": 1.2,
+   "amp": 0.18
+  },
+  {
+   "at": "005",
+   "off": 10,
+   "type": "chat"
+  },
+  {
+   "at": "005",
+   "off": 30,
+   "type": "chat"
+  },
+  {
+   "at": "005",
+   "off": 50,
+   "type": "chat"
+  },
+  {
+   "at": "006",
+   "off": 20,
+   "type": "pop"
+  },
+  {
+   "at": "006",
+   "off": 50,
+   "type": "ding",
+   "amp": 0.1
+  },
+  {
+   "at": "007",
+   "off": 20,
+   "type": "switch"
+  },
+  {
+   "at": "007",
+   "off": 24,
+   "type": "buzz",
+   "dur": 2,
+   "amp": 0.012
+  },
+  {
+   "at": "008",
+   "off": 6,
+   "type": "thud",
+   "amp": 0.3
+  },
+  {
+   "at": "009",
+   "off": 0,
+   "type": "steps",
+   "dur": 2,
+   "pan": -0.3
+  },
+  {
+   "at": "010",
+   "off": 26,
+   "type": "click",
+   "amp": 0.2
+  },
+  {
+   "at": "012",
+   "off": 8,
+   "type": "ding",
+   "amp": 0.07
+  },
+  {
+   "at": "014",
+   "off": 20,
+   "type": "thud",
+   "amp": 0.3
+  },
+  {
+   "at": "014",
+   "off": 44,
+   "type": "thud",
+   "amp": 0.3
+  },
+  {
+   "at": "014",
+   "off": 70,
+   "type": "thud",
+   "amp": 0.3
+  },
+  {
+   "at": "015",
+   "off": 10,
+   "type": "swoosh",
+   "amp": 0.12
+  },
+  {
+   "at": "018",
+   "off": 20,
+   "type": "pop"
+  },
+  {
+   "at": "020",
+   "off": 36,
+   "type": "swoosh",
+   "amp": 0.1
+  },
+  {
+   "at": "021",
+   "off": 6,
+   "type": "click",
+   "amp": 0.2
+  },
+  {
+   "at": "022",
+   "off": 10,
+   "type": "pop"
+  },
+  {
+   "at": "022",
+   "off": 150,
+   "type": "swoosh",
+   "amp": 0.1
+  },
+  {
+   "at": "024",
+   "off": 70,
+   "type": "swoosh",
+   "amp": 0.12
+  },
+  {
+   "at": "026",
+   "off": 8,
+   "type": "pop"
+  },
+  {
+   "at": "027",
+   "off": 6,
+   "type": "thud",
+   "amp": 0.25
+  },
+  {
+   "at": "027",
+   "off": 12,
+   "type": "click",
+   "amp": 0.25
+  },
+  {
+   "at": "028",
+   "off": 30,
+   "type": "click"
+  },
+  {
+   "at": "028",
+   "off": 60,
+   "type": "chat"
+  },
+  {
+   "at": "029",
+   "off": 10,
+   "type": "whooshUp",
+   "dur": 0.8,
+   "amp": 0.15
+  },
+  {
+   "at": "030",
+   "off": 0,
+   "type": "clap",
+   "amp": 0.1
+  },
+  {
+   "at": "031",
+   "off": 20,
+   "type": "ding",
+   "amp": 0.1
+  },
+  {
+   "at": "032",
+   "off": 40,
+   "type": "stamp",
+   "amp": 0.4
+  },
+  {
+   "at": "032",
+   "off": 42,
+   "type": "crackle",
+   "dur": 0.6,
+   "amp": 0.06
+  },
+  {
+   "at": "033",
+   "off": 30,
+   "type": "pop"
+  },
+  {
+   "at": "034",
+   "off": 20,
+   "type": "swoosh",
+   "amp": 0.1
+  },
+  {
+   "at": "035",
+   "off": 10,
+   "type": "swoosh",
+   "amp": 0.2
+  },
+  {
+   "at": "036",
+   "off": 30,
+   "type": "switch"
+  },
+  {
+   "at": "037",
+   "off": 10,
+   "type": "swoosh",
+   "amp": 0.15
+  },
+  {
+   "at": "038",
+   "off": 0,
+   "type": "thud",
+   "amp": 0.15
+  },
+  {
+   "at": "038",
+   "off": 14,
+   "type": "thud",
+   "amp": 0.15
+  },
+  {
+   "at": "038",
+   "off": 28,
+   "type": "thud",
+   "amp": 0.15
+  },
+  {
+   "at": "038",
+   "off": 42,
+   "type": "thud",
+   "amp": 0.15
+  },
+  {
+   "at": "039",
+   "off": 20,
+   "type": "buzz",
+   "dur": 3,
+   "amp": 0.02
+  },
+  {
+   "at": "040",
+   "off": 10,
+   "type": "click",
+   "amp": 0.2
+  },
+  {
+   "at": "041",
+   "off": 40,
+   "type": "pop"
+  },
+  {
+   "at": "042",
+   "off": 10,
+   "type": "alarm",
+   "dur": 0.6,
+   "amp": 0.05
+  },
+  {
+   "at": "042",
+   "off": 60,
+   "type": "swoosh",
+   "amp": 0.12
+  },
+  {
+   "at": "043",
+   "off": 20,
+   "type": "whoosh",
+   "dur": 1.2,
+   "amp": 0.08
+  },
+  {
+   "at": "044",
+   "off": 12,
+   "type": "click",
+   "amp": 0.2
+  },
+  {
+   "at": "044",
+   "off": 34,
+   "type": "click",
+   "amp": 0.2
+  },
+  {
+   "at": "045",
+   "off": 14,
+   "type": "swoosh",
+   "amp": 0.08
+  },
+  {
+   "at": "046",
+   "off": 130,
+   "type": "swoosh",
+   "amp": 0.14
+  },
+  {
+   "at": "047",
+   "off": 0,
+   "type": "steps",
+   "dur": 3,
+   "pan": 0.3
+  },
+  {
+   "at": "049",
+   "off": 10,
+   "type": "swoosh",
+   "amp": 0.1
+  },
+  {
+   "at": "049",
+   "off": 30,
+   "type": "thud",
+   "amp": 0.2
+  },
+  {
+   "at": "050",
+   "off": 100,
+   "type": "ding",
+   "amp": 0.1
+  },
+  {
+   "at": "050",
+   "off": 120,
+   "type": "pop"
+  },
+  {
+   "at": "051",
+   "off": 30,
+   "type": "click",
+   "amp": 0.12
+  },
+  {
+   "at": "051",
+   "off": 100,
+   "type": "click",
+   "amp": 0.12
+  },
+  {
+   "at": "052",
+   "off": 20,
+   "type": "click",
+   "amp": 0.12
+  },
+  {
+   "at": "052",
+   "off": 45,
+   "type": "click",
+   "amp": 0.12
+  },
+  {
+   "at": "052",
+   "off": 70,
+   "type": "click",
+   "amp": 0.12
+  },
+  {
+   "at": "053",
+   "off": 0,
+   "type": "steps",
+   "dur": 1.5,
+   "pan": 0.3
+  },
+  {
+   "at": "053",
+   "off": 60,
+   "type": "thud",
+   "amp": 0.2
+  },
+  {
+   "at": "053",
+   "off": 150,
+   "type": "stamp",
+   "amp": 0.35
+  },
+  {
+   "at": "054",
+   "off": 40,
+   "type": "thud",
+   "amp": 0.15
+  },
+  {
+   "at": "054",
+   "off": 60,
+   "type": "thud",
+   "amp": 0.15
+  },
+  {
+   "at": "055",
+   "off": 2,
+   "type": "thud",
+   "amp": 0.35
+  },
+  {
+   "at": "056",
+   "off": 16,
+   "type": "steps",
+   "dur": 1.5,
+   "pan": 0.3
+  },
+  {
+   "at": "057",
+   "off": 80,
+   "type": "swoosh",
+   "amp": 0.12
+  },
+  {
+   "at": "058",
+   "off": 18,
+   "type": "click",
+   "amp": 0.2
+  },
+  {
+   "at": "058",
+   "off": 34,
+   "type": "click",
+   "amp": 0.2
+  },
+  {
+   "at": "059",
+   "off": 12,
+   "type": "ding",
+   "amp": 0.1
+  },
+  {
+   "at": "060",
+   "off": 40,
+   "type": "whooshUp",
+   "dur": 0.8,
+   "amp": 0.15
+  },
+  {
+   "at": "061",
+   "off": 55,
+   "type": "stamp",
+   "amp": 0.5
+  },
+  {
+   "at": "062",
+   "off": 20,
+   "type": "swoosh",
+   "amp": 0.1
+  },
+  {
+   "at": "063",
+   "off": 20,
+   "type": "whoosh",
+   "dur": 3,
+   "amp": 0.14
+  },
+  {
+   "at": "063",
+   "off": 95,
+   "type": "stamp",
+   "amp": 0.5
+  },
+  {
+   "at": "063",
+   "off": 150,
+   "type": "swoosh",
+   "amp": 0.15
+  },
+  {
+   "at": "064",
+   "off": 30,
+   "type": "ding",
+   "amp": 0.08
+  },
+  {
+   "at": "065",
+   "off": 10,
+   "type": "swoosh",
+   "amp": 0.08
+  },
+  {
+   "at": "066",
+   "off": 70,
+   "type": "pop"
+  },
+  {
+   "at": "066",
+   "off": 10,
+   "type": "thud",
+   "amp": 0.12
+  },
+  {
+   "at": "066",
+   "off": 34,
+   "type": "thud",
+   "amp": 0.12
+  },
+  {
+   "at": "066",
+   "off": 58,
+   "type": "thud",
+   "amp": 0.12
+  },
+  {
+   "at": "066",
+   "off": 82,
+   "type": "thud",
+   "amp": 0.12
+  },
+  {
+   "at": "067",
+   "off": 30,
+   "type": "click",
+   "amp": 0.15
+  },
+  {
+   "at": "067",
+   "off": 105,
+   "type": "stamp",
+   "amp": 0.4
+  },
+  {
+   "at": "068",
+   "off": 26,
+   "type": "steps",
+   "dur": 2.2,
+   "pan": 0.4
+  },
+  {
+   "at": "069",
+   "off": 20,
+   "type": "swoosh",
+   "amp": 0.1
+  },
+  {
+   "at": "070",
+   "off": 6,
+   "type": "whoosh",
+   "dur": 1.2,
+   "amp": 0.14
+  },
+  {
+   "at": "071",
+   "off": 26,
+   "type": "stamp",
+   "amp": 0.5
+  },
+  {
+   "at": "071",
+   "off": 26,
+   "type": "crackle",
+   "dur": 0.25,
+   "amp": 0.08
+  },
+  {
+   "at": "072",
+   "off": 14,
+   "type": "pop"
+  },
+  {
+   "at": "073",
+   "off": 100,
+   "type": "clap",
+   "amp": 0.1
+  },
+  {
+   "at": "075",
+   "off": 12,
+   "type": "pop"
+  },
+  {
+   "at": "075",
+   "off": 60,
+   "type": "pop"
+  },
+  {
+   "at": "075",
+   "off": 108,
+   "type": "pop"
+  },
+  {
+   "at": "075",
+   "off": 40,
+   "type": "splash",
+   "amp": 0.1
+  },
+  {
+   "at": "075",
+   "off": 88,
+   "type": "splash",
+   "amp": 0.1
+  },
+  {
+   "at": "075",
+   "off": 136,
+   "type": "splash",
+   "amp": 0.1
+  },
+  {
+   "at": "074",
+   "off": 10,
+   "type": "ring",
+   "dur": 1.0,
+   "amp": 0.04
+  },
+  {
+   "at": "076",
+   "off": 20,
+   "type": "swoosh",
+   "amp": 0.12
+  },
+  {
+   "at": "077",
+   "off": 8,
+   "type": "pop"
+  },
+  {
+   "at": "078",
+   "off": 40,
+   "type": "thud",
+   "amp": 0.2
+  },
+  {
+   "at": "080",
+   "off": 40,
+   "type": "swoosh",
+   "amp": 0.1
+  },
+  {
+   "at": "082",
+   "off": 10,
+   "type": "swoosh",
+   "amp": 0.08
+  },
+  {
+   "at": "083",
+   "off": 20,
+   "type": "chat"
+  },
+  {
+   "at": "083",
+   "off": 45,
+   "type": "chat"
+  },
+  {
+   "at": "083",
+   "off": 70,
+   "type": "chat"
+  },
+  {
+   "at": "084",
+   "off": 30,
+   "type": "pop"
+  },
+  {
+   "at": "084",
+   "off": 120,
+   "type": "stamp",
+   "amp": 0.3
+  },
+  {
+   "at": "085",
+   "off": 16,
+   "type": "whooshUp",
+   "dur": 1.0,
+   "amp": 0.18
+  },
+  {
+   "at": "085",
+   "off": 82,
+   "type": "stamp",
+   "amp": 0.45
+  },
+  {
+   "at": "085",
+   "off": 82,
+   "type": "ding",
+   "amp": 0.12
+  },
+  {
+   "at": "086",
+   "off": 6,
+   "type": "swoosh",
+   "amp": 0.08
+  },
+  {
+   "at": "087",
+   "off": 2,
+   "type": "swoosh",
+   "amp": 0.08
+  },
+  {
+   "at": "088",
+   "off": 10,
+   "type": "swoosh",
+   "amp": 0.08
+  },
+  {
+   "at": "089",
+   "off": 14,
+   "type": "stamp",
+   "amp": 0.4
+  },
+  {
+   "at": "090",
+   "off": 60,
+   "type": "ding",
+   "amp": 0.1
+  },
+  {
+   "at": "090",
+   "off": 100,
+   "type": "ding",
+   "amp": 0.1
+  },
+  {
+   "at": "090",
+   "off": 140,
+   "type": "ding",
+   "amp": 0.1
+  },
+  {
+   "at": "091",
+   "off": 0,
+   "type": "heartbeat",
+   "dur": 5.5,
+   "amp": 0.1
+  },
+  {
+   "at": "092",
+   "off": 20,
+   "type": "swoosh",
+   "amp": 0.1
+  },
+  {
+   "at": "094",
+   "off": 36,
+   "type": "sent",
+   "amp": 0.12
+  },
+  {
+   "at": "094",
+   "off": 36,
+   "type": "click",
+   "amp": 0.2
+  },
+  {
+   "at": "095",
+   "off": 8,
+   "type": "ding",
+   "amp": 0.08
+  },
+  {
+   "at": "096",
+   "off": 0,
+   "type": "steps",
+   "dur": 1.5
+  },
+  {
+   "at": "098",
+   "off": 40,
+   "type": "swoosh",
+   "amp": 0.2
+  },
+  {
+   "at": "098",
+   "off": 40,
+   "type": "crackle",
+   "dur": 0.3,
+   "amp": 0.06
+  },
+  {
+   "at": "098",
+   "off": 44,
+   "type": "ding",
+   "amp": 0.08
+  },
+  {
+   "at": "100",
+   "off": 70,
+   "type": "ding",
+   "amp": 0.12
+  },
+  {
+   "at": "100",
+   "off": 96,
+   "type": "pop"
+  },
+  {
+   "at": "101",
+   "off": 36,
+   "type": "ding",
+   "amp": 0.12
+  },
+  {
+   "at": "102",
+   "off": 60,
+   "type": "pop"
+  },
+  {
+   "at": "103",
+   "off": 6,
+   "type": "steps",
+   "dur": 3.4
+  },
+  {
+   "at": "103",
+   "off": 14,
+   "type": "steps",
+   "dur": 3.4,
+   "pan": 0.3
+  },
+  {
+   "at": "104",
+   "off": 40,
+   "type": "pop"
+  },
+  {
+   "at": "107",
+   "off": 14,
+   "type": "thud",
+   "amp": 0.35
+  },
+  {
+   "at": "107",
+   "off": 22,
+   "type": "thud",
+   "amp": 0.3
+  },
+  {
+   "at": "107",
+   "off": 22,
+   "type": "whoosh",
+   "dur": 0.8,
+   "amp": 0.1
+  },
+  {
+   "at": "108",
+   "off": 20,
+   "type": "thud",
+   "amp": 0.4
+  },
+  {
+   "at": "108",
+   "off": 54,
+   "type": "thud",
+   "amp": 0.4
+  },
+  {
+   "at": "108",
+   "off": 62,
+   "type": "thud",
+   "amp": 0.35
+  },
+  {
+   "at": "108",
+   "off": 118,
+   "type": "pop"
+  },
+  {
+   "at": "109",
+   "off": 20,
+   "type": "whooshUp",
+   "dur": 2,
+   "amp": 0.12
+  },
+  {
+   "at": "110",
+   "off": 0,
+   "type": "heartbeat",
+   "dur": 3.5,
+   "amp": 0.08
+  },
+  {
+   "at": "111",
+   "off": 24,
+   "type": "pop"
+  },
+  {
+   "at": "111",
+   "off": 38,
+   "type": "pop"
+  },
+  {
+   "at": "111",
+   "off": 52,
+   "type": "pop"
+  },
+  {
+   "at": "112",
+   "off": 20,
+   "type": "thud",
+   "amp": 0.4
+  },
+  {
+   "at": "112",
+   "off": 50,
+   "type": "thud",
+   "amp": 0.4
+  },
+  {
+   "at": "112",
+   "off": 80,
+   "type": "thud",
+   "amp": 0.4
+  },
+  {
+   "at": "112",
+   "off": 112,
+   "type": "thud",
+   "amp": 0.4
+  },
+  {
+   "at": "112",
+   "off": 150,
+   "type": "thud",
+   "amp": 0.25
+  },
+  {
+   "at": "113",
+   "off": 92,
+   "type": "swoosh",
+   "amp": 0.1
+  },
+  {
+   "at": "114",
+   "off": 40,
+   "type": "stamp",
+   "amp": 0.2
+  },
+  {
+   "at": "114",
+   "off": 70,
+   "type": "stamp",
+   "amp": 0.2
+  },
+  {
+   "at": "115",
+   "off": 0,
+   "type": "ding",
+   "amp": 0.2
+  },
+  {
+   "at": "115",
+   "off": 0,
+   "type": "stamp",
+   "amp": 0.3
+  },
+  {
+   "at": "115",
+   "off": 20,
+   "type": "thud",
+   "amp": 0.3
+  },
+  {
+   "at": "115",
+   "off": 36,
+   "type": "thud",
+   "amp": 0.3
+  },
+  {
+   "at": "115",
+   "off": 50,
+   "type": "thud",
+   "amp": 0.3
+  },
+  {
+   "at": "115",
+   "off": 64,
+   "type": "thud",
+   "amp": 0.3
+  },
+  {
+   "at": "115",
+   "off": 80,
+   "type": "thud",
+   "amp": 0.3
+  },
+  {
+   "at": "116",
+   "off": 80,
+   "type": "clap",
+   "amp": 0.15
+  },
+  {
+   "at": "117",
+   "off": 40,
+   "type": "pop"
+  },
+  {
+   "at": "119",
+   "off": 4,
+   "type": "clap",
+   "amp": 0.12
+  },
+  {
+   "at": "119",
+   "off": 13,
+   "type": "clap",
+   "amp": 0.12
+  },
+  {
+   "at": "119",
+   "off": 22,
+   "type": "clap",
+   "amp": 0.12
+  },
+  {
+   "at": "119",
+   "off": 31,
+   "type": "clap",
+   "amp": 0.12
+  },
+  {
+   "at": "119",
+   "off": 40,
+   "type": "clap",
+   "amp": 0.12
+  },
+  {
+   "at": "120",
+   "off": 20,
+   "type": "steps",
+   "dur": 3,
+   "pan": 0.3
+  },
+  {
+   "at": "121",
+   "off": 12,
+   "type": "stamp",
+   "amp": 0.22
+  },
+  {
+   "at": "121",
+   "off": 44,
+   "type": "stamp",
+   "amp": 0.22
+  },
+  {
+   "at": "121",
+   "off": 100,
+   "type": "buzz",
+   "dur": 8,
+   "amp": 0.01
+  },
+  {
+   "at": "123",
+   "off": 88,
+   "type": "swoosh",
+   "amp": 0.2
+  },
+  {
+   "at": "123",
+   "off": 88,
+   "type": "stamp",
+   "amp": 0.25
+  },
+  {
+   "at": "124",
+   "off": 6,
+   "type": "buzz",
+   "dur": 0.5,
+   "amp": 0.03
+  },
+  {
+   "at": "124",
+   "off": 40,
+   "type": "buzz",
+   "dur": 0.5,
+   "amp": 0.03
+  },
+  {
+   "at": "124",
+   "off": 14,
+   "type": "pop"
+  },
+  {
+   "at": "124",
+   "off": 100,
+   "type": "stamp",
+   "amp": 0.3
+  },
+  {
+   "at": "126",
+   "off": 135,
+   "type": "switch"
+  }
+ ]
+}
