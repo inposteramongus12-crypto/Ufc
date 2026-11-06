@@ -47,6 +47,12 @@ const KeyLight: React.FC<{l: Light}> = ({l}) => {
 	);
 };
 
+/* the final camera of the current shot (after the angle), for things that must stay inside the safe zone */
+export const CamCtx = React.createContext<Cam>({x: 0, y: 0, zoom: 1, focus: 1});
+export const useCam = () => React.useContext(CamCtx);
+/* only for tools/check-edges.mjs: no light, vignette or grain, so plates keep their flat #11142c fill and can be found */
+export const EdgeCtx = React.createContext(false);
+
 export const Stage: React.FC<{cam: Cam; bg?: string; children: React.ReactNode; grain?: number; vig?: number; dust?: string; light?: Light | false; still?: boolean}> = ({
 	cam: cam0,
 	bg = '#101225',
@@ -59,20 +65,23 @@ export const Stage: React.FC<{cam: Cam; bg?: string; children: React.ReactNode; 
 }) => {
 	const {gf} = useShot();
 	const a = useAngle();
+	const edge = React.useContext(EdgeCtx);
 	const cam = still ? cam0 : applyAngle(cam0, a, gf);
 	return (
 	<AbsoluteFill style={{background: bg}}>
 		<Camera cam={cam}>
+			<CamCtx.Provider value={cam}>
 			{children}
+			</CamCtx.Provider>
 			{dust ? (
 				<Layer depth={0.8}>
 					<Dust seed={'d' + dust} n={30} color={dust} size={[1.2, 3.5]} speed={0.3} opacity={0.45} />
 				</Layer>
 			) : null}
 		</Camera>
-		{light ? <KeyLight l={light} /> : null}
-		<Vignette strength={vig} color="8,8,24" />
-		<Grain opacity={grain} />
+		{light && !edge ? <KeyLight l={light} /> : null}
+		{edge ? null : <Vignette strength={vig} color="8,8,24" />}
+		{edge ? null : <Grain opacity={grain} />}
 	</AbsoluteFill>
 	);
 };

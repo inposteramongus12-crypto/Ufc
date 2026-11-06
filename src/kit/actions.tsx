@@ -18,7 +18,7 @@ export const idle = (f: number, seed = 0): Pose => ({
 
 export const blinkAt = (f: number, seed = 0, period = 90) => {
 	const t = (f + Math.floor(random('bl' + seed) * period)) % period;
-	return t < 4 ? Math.sin((t / 4) * Math.PI) : 0;
+	return t < 4 ? 0.7 * Math.sin((t / 4) * Math.PI) : 0; // 0.7: a blink narrows the eyes, it never wipes them out
 };
 
 export const walk = (ph: number): Pose => ({

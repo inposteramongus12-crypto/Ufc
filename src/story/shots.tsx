@@ -27,7 +27,7 @@ const Reveal: React.FC<{k: number; x: number; y: number; children: React.ReactNo
 	</g>
 );
 const spring01 = (f: number, t0: number, len = 12) => interpolate(f, [t0, t0 + len], [0, 1], {...clamp, easing: ease});
-const dark = {filter: 'brightness(0.1)'} as React.CSSProperties;
+const dark = {filter: 'brightness(0.55) contrast(1.1)'} as React.CSSProperties;
 
 /* ---------------------------------------------------------------- PART 1: HOOK */
 
@@ -85,8 +85,7 @@ const S03: React.FC = () => {
 	const camA = usePush(camOn(960, 560, 1.0), camOn(960, 590, 1.12));
 	const camB = usePush(camOn(900, 540, 1.1), camOn(840, 560, 1.4));
 	const tk = spring01(f, 4, 14);
-	const blinkOn = f < cut ? (Math.floor(f / 5) % 3 === 0 ? 0.35 : 1) : 1;
-	const fl = flash(f, cut, 8);
+		const fl = flash(f, cut, 8);
 	return (
 		<>
 			{ph === 0 ? (
@@ -98,12 +97,11 @@ const S03: React.FC = () => {
 					</Layer>
 					<Layer depth={1}>
 						<Svg>
-							<DayPlate x={960} y={470} value={counterAt(gf)} s={1.2} blink={blinkOn} />
 							<g transform={`translate(960,760) scale(${0.7 + 0.3 * tk})`} opacity={tk}>
 								<text textAnchor="middle" y={0} fontSize={170} fontFamily={FONT} fontWeight={900} fill="#ffc94a" stroke="#0b0d1e" strokeWidth={10} paintOrder="stroke">
 									ЧТО ЕСЛИ…
 								</text>
-								<text textAnchor="middle" y={110} fontSize={96} fontFamily={FONT} fontWeight={900} fill="#fff" stroke="#0b0d1e" strokeWidth={8} paintOrder="stroke">
+								<text textAnchor="middle" y={120} fontSize={92} fontFamily={FONT} fontWeight={900} fill="#fff" stroke="#0b0d1e" strokeWidth={6} paintOrder="stroke" wordSpacing={34} letterSpacing={2}>
 									UFC НА ОДИН ГОД?
 								</text>
 							</g>
@@ -119,13 +117,13 @@ const S03: React.FC = () => {
 					</Layer>
 					<Layer depth={1.2}>
 						<Svg>
-							<ellipse cx={960} cy={560} rx={620} ry={420} fill="#e8f0ff" opacity={0.16} style={{filter: 'blur(40px)'}} />
+							<ellipse cx={900} cy={600} rx={420} ry={520} fill="#e8f0ff" opacity={0.34} style={{filter: 'blur(36px)'}} />
 						</Svg>
 					</Layer>
 					<Layer depth={1}>
 						<Svg>
 							<g style={dark}>
-								<Actor who="hero" x={900} floor={FL} s={HS} facing={1} faceTurn={0} look={[0, 0]} pose={{...idle(gf, 3), armF: [18, 100], armB: [10, 100], lean: 2}} uid="h3" shadow={false} />
+								<Actor who="hero" x={900} floor={FL} s={HS} facing={1} faceTurn={0} look={[0, 0]} rim="#ffffff" rimW={5} pose={{...idle(gf, 3), armF: [18, 100], armB: [10, 100], lean: 2}} uid="h3" shadow={false} />
 							</g>
 						</Svg>
 					</Layer>
@@ -475,7 +473,7 @@ const S15: React.FC = () => {
 			<Layer depth={1}>
 				<Svg>
 					<Actor who="irma" x={1180} floor={FL} s={IS} facing={-1} faceTurn={0.3} look={[0, 0.6]} mouth="flat" pose={{...idle(gf, 1), armF: [-52, 70]}} uid="i15" />
-					<Actor who="heavy" x={w.x} floor={FL} s={1.05} facing={1} faceTurn={0.5} look={[0.8, 0]} expr={f > 80 ? 'angry' : 'normal'} pose={hv} vx={w.vx} bob={w.bob} uid="v15" />
+					<Actor who="voron" x={w.x} floor={FL} s={1.0} facing={1} faceTurn={0.5} look={[0.8, 0]} expr={f > 80 ? 'angry' : 'normal'} pose={hv} vx={w.vx} bob={w.bob} uid="v15" />
 					<Actor who="hero" x={1480} floor={FL} s={HS} facing={-1} faceTurn={0.5} look={[-0.7, 0]} mouth={shrug > 0.4 ? 'smile' : undefined} pose={hp} uid="h15" />
 					<HeroPlate x={1480} s={0.95} />
 					{fly > 0 && fly < 1 ? (
@@ -489,7 +487,7 @@ const S15: React.FC = () => {
 							<rect x={-70} y={-16} width={140} height={32} rx={8} fill="#ffe08a" stroke="#0d0d1c" strokeWidth={4} />
 						</g>
 					) : null}
-					{bub > 0 ? (
+					{bub > 0 && f < at('019') - 8 ? (
 						<Bubble x={650} y={290} w={640} h={150} t={bub} tail={[0, 150]}>
 							<text x={0} y={22} textAnchor="middle" fontSize={64} fontFamily={FONT} fontWeight={900} fill="#2a2f4a">
 								Я ВОРОН. УХОЖУ
@@ -544,7 +542,7 @@ const S19: React.FC = () => {
 				<Svg>
 					<Actor who="irma" x={620} floor={FL} s={IS} facing={1} faceTurn={0.3} look={[0.4, 0.5]} mouth="flat" pose={{...idle(gf, 1), armF: [52, 70]}} uid="i19" />
 					<Chair x={1400} y={800} facing={-1} />
-					<Actor who="heavy" x={1400} floor={FL} s={1.05} seat={790} facing={-1} faceTurn={0.4} look={[-0.6, 0.3]} expr={sag > 0.3 ? 'sad' : 'angry'} pose={{...idle(gf, 4), armF: [40, 80], armB: [30, 80], legB: [88, 85], legF: [92, 90], lean: -4}} uid="v19" shadow={false} />
+					<Actor who="voron" x={1400} floor={FL} s={1.0} seat={790} facing={-1} faceTurn={0.4} look={[-0.6, 0.3]} expr={sag > 0.3 ? 'sad' : 'angry'} pose={{...idle(gf, 4), armF: [40, 80], armB: [30, 80], legB: [88, 85], legF: [92, 90], lean: -4}} uid="v19" shadow={false} />
 					<g transform={`translate(980,${590 + 60 * sag}) rotate(${-12 * sag}) scale(${1 - 0.5 * sag})`} opacity={1 - 0.55 * sag}>
 						<rect x={-250} y={-60} width={500} height={120} rx={30} fill="#fbf8ef" stroke="#0d0d1c" strokeWidth={6} />
 						<text x={0} y={20} textAnchor="middle" fontSize={56} fontFamily={FONT} fontWeight={900} fill="#2a2f4a">
@@ -603,7 +601,7 @@ const S21: React.FC = () => {
 	const drag = spring01(f, at('024') + 70, 30);
 	const shift = 7 * drag;
 	// the ring is drawn by Calendar at (CX + col, CY + row): column 0, rows 2 → 3 (+7 days)
-	const CX = 1100;
+	const CX = 1090;
 	const CY = 470;
 	const ringX = CX - 3 * 78;
 	const ringY = CY - 70 + 78 * (2 + drag);
@@ -619,7 +617,7 @@ const S21: React.FC = () => {
 				<Svg>
 					<Calendar x={CX} y={CY} s={1} shift={shift} glow={drag} />
 					<Actor who="hero" x={730} floor={FL} s={HS} facing={1} faceTurn={0.5} look={[0.8, -0.2]} mouth="smirk" pose={hp} handF="point" uid="h21" />
-					<HeroPlate x={730} s={0.95} />
+					<HeroPlate x={730} s={0.95} dx={140} />
 				</Svg>
 			</Layer>
 		</Stage>
@@ -686,14 +684,9 @@ const S23: React.FC = () => {
 			</Layer>
 			<Layer depth={1}>
 				<Svg>
-					<Calendar x={1100} y={470} s={1} shift={shift} glow={back} />
-					<g transform="translate(1560,330)">
-						<path d="M-40,60 L-40,-20 A40,40 0 0 1 40,-20 L40,60" stroke="#d9372b" strokeWidth={26} fill="none" />
-						<rect x={-53} y={44} width={26} height={22} fill="#e4e6ec" />
-						<rect x={27} y={44} width={26} height={22} fill="#e4e6ec" />
-					</g>
+					<Calendar x={1090} y={470} s={1} shift={shift} glow={back} />
 					<Actor who="hero" x={730} floor={FL} s={HS} facing={1} faceTurn={0.5} look={[0.8, -0.2]} mouth="smile" pose={hp} uid="h23" />
-					<HeroPlate x={730} s={0.95} />
+					<HeroPlate x={730} s={0.95} dx={140} />
 				</Svg>
 			</Layer>
 			{snap > 0.02 ? <AbsoluteFill style={{background: '#fff', opacity: snap * 0.5}} /> : null}

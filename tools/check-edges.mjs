@@ -19,7 +19,8 @@ fs.rmSync(dir, {recursive: true, force: true});
 fs.mkdirSync(dir, {recursive: true});
 const serveUrl = await bundle({entryPoint: path.join(ROOT, 'src', 'index.ts')});
 const COMP = val('--comp', 'Long');
-const comp = await selectComposition({serveUrl, id: COMP, chromiumOptions: {gl: 'angle'}});
-for (const f of frames) await renderStill({composition: comp, serveUrl, output: path.join(dir, `f${String(f).padStart(6, '0')}.png`), frame: f, chromiumOptions: {gl: 'angle'}, scale: 0.5});
+const inputProps = COMP === 'Long' ? {sound: false, edge: true} : {sound: false}; // edge: whip frames without blur, plates stay detectable
+const comp = await selectComposition({serveUrl, id: COMP, inputProps, chromiumOptions: {gl: 'angle'}});
+for (const f of frames) await renderStill({composition: comp, serveUrl, output: path.join(dir, `f${String(f).padStart(6, '0')}.png`), frame: f, inputProps, chromiumOptions: {gl: 'angle'}, scale: 0.5});
 const r = spawnSync('python3', ['-I', path.join(ROOT, 'tools', 'edge-scan.py'), dir], {encoding: 'utf8'});
 process.stdout.write(r.stdout + r.stderr);

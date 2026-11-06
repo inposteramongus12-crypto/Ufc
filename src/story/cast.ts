@@ -23,8 +23,8 @@ export const CAST: Record<string, CastMember> = {
 	senya: {sp: 'SENYA', color: '#2f6fd8', outfit: 'tee', hair: 'spiky', hairColor: '#5a3a22', glove: '#f4f4f4', rim: '#e6f0ff', rimW: 2.4, shoe: '#f2f2f2'},
 	// Тайо Адеби: зелёный, кепка, розовые перчатки (без голоса, облачко)
 	tayo: {color: '#3fae4f', outfit: 'tee', hair: 'cap', hairColor: '#f5f5f0', glove: '#ff4fa0', rim: '#e8fff0', rimW: 2.4, shoe: '#f2f2f2'},
-	// Ворон, чемпион: тёмно-синий худи, без пояса, тёмная чёлка, седые усы (без голоса, облачко)
-	voron: {color: '#2e3bb0', outfit: 'hoodie', hair: 'bob', hairColor: '#2b1d3a', acc: ['mustache'], rim: '#e6e9ff', rimW: 2.4, shoe: '#1d2150'},
+	// Ворон, чемпион-тяжеловес (огромный, но в кадре без пояса): тёмно-синий худи, широкий торс, тёмная чёлка, седые усы (без голоса, облачко)
+	voron: {color: '#2e3bb0', outfit: 'hoodie', hair: 'bob', hairColor: '#2b1d3a', acc: ['mustache'], age: 0.5, scale: 1.18, bulk: 1.35, rim: '#e6e9ff', rimW: 2.4, shoe: '#1d2150'},
 	// тяжеловес: малиновый, самый высокий и самый широкий (bulk 1.5), седой, пояс виден (без голоса, облачко)
 	heavy: {color: '#c2409a', outfit: 'tee', hair: 'grey', age: 0.6, scale: 1.2, bulk: 1.5, acc: ['belt'], beltColor: '#e8eef2', rim: '#ffe0f2', rimW: 2.4, shoe: '#111'},
 };

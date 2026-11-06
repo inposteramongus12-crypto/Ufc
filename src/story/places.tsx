@@ -2,7 +2,8 @@ import React from 'react';
 import {interpolate, random} from 'remotion';
 import {AgeBadge, FONT, HAND} from '../kit/ui';
 import {counterAt, counterChangedAgo, useShot} from '../kit/core';
-import {clamp} from '../kit/kit';
+import {clamp, useCam} from '../kit/kit';
+import {WHIP_SHIFT, WHIP_ZOOM, whipAt} from '../kit/whip';
 
 /* Places and props of the UFC story (parts 1–3). World is 1920×1080, floor line y = 900.
    Small text is sized a third bigger than the template default (nothing under 40 px at zoom 1). */
@@ -27,54 +28,67 @@ export const daysWord = (n: number) => {
 	if (a >= 2 && a <= 4 && (b < 12 || b > 14)) return 'ДНЯ';
 	return 'ДНЕЙ';
 };
-/* (x, y) = tip of the pointer; the plate stands above it. Fill #11142c on purpose: check-edges finds plates by it. */
-export const DayPlate: React.FC<{x: number; y: number; value: number; s?: number; pop?: number; blink?: number; c?: string}> = ({x, y, value, s = 1, pop = 1, blink = 1, c = '#ffc94a'}) => {
-	const v = Math.max(0, Math.floor(value));
-	const frac = Math.max(0, value - v);
-	const W = 330;
-	const H = 190;
-	const cid = `dp${Math.round(x)}_${Math.round(y)}`;
+/* (x, y) = tip of the pointer; the plate stands above it. dx > 0 slides the plate to the left of the pointer
+   (so it does not cover what is on the right). Fill #11142c on purpose: check-edges finds plates by it. */
+export const PLATE_W = 330;
+export const PLATE_H = 190;
+export const DayPlate: React.FC<{x: number; y: number; value: number; s?: number; pop?: number; blink?: number; c?: string; dx?: number}> = ({x, y, value, s = 1, pop = 1, blink = 1, c = '#ffc94a', dx = 0}) => {
+	const v = Math.max(0, Math.round(value));
+	const W = PLATE_W;
+	const H = PLATE_H;
 	const word = daysWord(v);
+	const cx = -dx; // plate centre relative to the pointer
 	return (
 		<g transform={`translate(${x},${y}) scale(${s * pop})`} opacity={blink}>
-			<rect x={-W / 2 - 10} y={-H - 34} width={W + 20} height={H + 20} rx={44} fill={c} opacity={0.25} style={{filter: 'blur(14px)'}} />
-			<rect x={-W / 2} y={-H - 24} width={W} height={H} rx={36} fill="#11142c" stroke={c} strokeWidth={5} />
+			<rect x={cx - W / 2 - 10} y={-H - 34} width={W + 20} height={H + 20} rx={44} fill={c} opacity={0.25} style={{filter: 'blur(14px)'}} />
+			<rect x={cx - W / 2} y={-H - 24} width={W} height={H} rx={36} fill="#11142c" stroke={c} strokeWidth={5} />
 			<path d="M-16,-24 L0,0 L16,-24 Z" fill={c} />
-			<text x={0} y={-H + 22} textAnchor="middle" fontSize={40} fontFamily={FONT} fontWeight={800} fill="#ffe9a8" letterSpacing={2}>
+			<text x={cx} y={-H + 22} textAnchor="middle" fontSize={40} fontFamily={FONT} fontWeight={800} fill="#ffe9a8" letterSpacing={2}>
 				ДО ТУРНИРА
 			</text>
-			<clipPath id={cid}>
-				<rect x={-W / 2 + 10} y={-H + 26} width={W - 20} height={112} />
-			</clipPath>
-			<g clipPath={`url(#${cid})`}>
-				<text x={0} y={-H + 112 - frac * 112} textAnchor="middle" fontSize={104} fontFamily={FONT} fontWeight={900} fill="#fff">
-					{v}
-				</text>
-				{frac > 0.01 ? (
-					<text x={0} y={-H + 112 + 112 - frac * 112} textAnchor="middle" fontSize={104} fontFamily={FONT} fontWeight={900} fill="#fff">
-						{v + 1}
-					</text>
-				) : null}
-			</g>
-			<text x={0} y={-48} textAnchor="middle" fontSize={40} fontFamily={FONT} fontWeight={800} fill="#ffe9a8" letterSpacing={2}>
+			{/* the number just counts (no sliding digits): while it rolls, whole numbers flip every frame, so nothing is cut or sticks out */}
+			<text x={cx} y={-H + 106} textAnchor="middle" fontSize={104} fontFamily={FONT} fontWeight={900} fill="#fff">
+				{Math.round(value)}
+			</text>
+			<text x={cx} y={-44} textAnchor="middle" fontSize={40} fontFamily={FONT} fontWeight={800} fill="#ffe9a8" letterSpacing={2}>
 				{word}
 			</text>
 		</g>
 	);
 };
 
-/* the plate over a hero: pops and rings whenever the counter changes */
-export const HeroPlate: React.FC<{x: number; s?: number; hs?: number; y?: number; blink?: number}> = ({x, s = 0.9, hs = HS, y, blink = 1}) => {
+/* the plate over a hero: pops and rings whenever the counter changes. It is kept inside the safe zone of the
+   SCREEN (60 px from every edge) whatever the camera and the whip-pan do: its position is corrected from the
+   final camera, so a hero near the edge never drags it out of the frame. */
+export const SAFE = 60;
+export const HeroPlate: React.FC<{x: number; s?: number; hs?: number; y?: number; blink?: number; dx?: number}> = ({x, s = 0.95, hs = HS, y, blink = 1, dx = 0}) => {
 	const {gf} = useShot();
+	const cam = useCam();
 	const v = counterAt(gf);
 	const ago = counterChangedAgo(gf);
 	const pop = 1 + 0.2 * Math.exp(-Math.max(0, ago) / 4) * (ago >= 0 && ago < 40 ? 1 : 0);
 	const ring = interpolate(ago, [0, 14], [0, 1], clamp);
-	const py = y ?? headTop(hs) - 26;
+	const py = y ?? headTop(hs) - 64; // 64 px above the head: the lamp ring (radius R+22) stays below the plate
+	// anchor on the screen (depth-1 layer), then through the whip-pan
+	const w = whipAt(gf);
+	const S = w ? 1 + WHIP_ZOOM * w.k : 1;
+	const shift = w ? w.dir * WHIP_SHIFT * w.k : 0;
+	const m = cam.zoom * S; // screen pixels per world pixel
+	const ax = 960 + S * (960 + cam.zoom * (x - 960) - cam.x - 960) + shift;
+	const ay = 540 + S * (540 + cam.zoom * (py - 540) - cam.y - 540);
+	const sc = s * pop;
+	const left = (PLATE_W / 2 + 10 + dx) * sc * m;
+	const right = (PLATE_W / 2 + 10 - dx) * sc * m;
+	const top = (PLATE_H + 34) * sc * m;
+	let cx = 0;
+	let cy = 0;
+	if (ax - left < SAFE) cx = (SAFE - (ax - left)) / m;
+	if (ax + right > 1920 - SAFE) cx = -(ax + right - (1920 - SAFE)) / m;
+	if (ay - top < SAFE) cy = (SAFE - (ay - top)) / m;
 	return (
-		<g>
+		<g transform={`translate(${cx},${cy})`}>
 			{ago >= 0 && ago < 14 ? <ellipse cx={x} cy={py - 120 * s} rx={120 + ring * 220} ry={70 + ring * 120} fill="none" stroke="#ffe08a" strokeWidth={8 * (1 - ring)} opacity={1 - ring} /> : null}
-			<DayPlate x={x} y={py} value={v} s={s} pop={pop} blink={blink} />
+			<DayPlate x={x} y={py} value={v} s={s} pop={pop} blink={blink} dx={dx} />
 		</g>
 	);
 };
@@ -206,15 +220,15 @@ export const CageSide: React.FC<{f: number; shake?: number}> = ({f, shake = 0}) 
 /* scoreboard on cables; the two surnames are small on the poster, but big enough to read */
 export const Scoreboard: React.FC<{x: number; y: number; f: number; sway?: number}> = ({x, y, f, sway = 0}) => (
 	<g transform={`translate(${x},${y}) rotate(${Math.sin(f / 3) * sway})`}>
-		<line x1={-260} y1={-300} x2={-230} y2={0} stroke="#7a819a" strokeWidth={5} />
-		<line x1={260} y1={-300} x2={230} y2={0} stroke="#7a819a" strokeWidth={5} />
-		<rect x={-300} y={0} width={600} height={300} rx={26} fill="#131735" stroke="#8fa3e8" strokeWidth={6} />
-		<rect x={-270} y={24} width={540} height={116} rx={14} fill="#1d2b6b" />
-		<text x={0} y={104} textAnchor="middle" fontSize={78} fontFamily={FONT} fontWeight={900} fill="#ffe08a">
+		<line x1={-340} y1={-300} x2={-300} y2={0} stroke="#7a819a" strokeWidth={5} />
+		<line x1={340} y1={-300} x2={300} y2={0} stroke="#7a819a" strokeWidth={5} />
+		<rect x={-400} y={0} width={800} height={320} rx={26} fill="#131735" stroke="#8fa3e8" strokeWidth={6} />
+		<rect x={-370} y={22} width={740} height={116} rx={14} fill="#1d2b6b" />
+		<text x={0} y={104} textAnchor="middle" fontSize={84} fontFamily={FONT} fontWeight={900} fill="#ffe08a">
 			БОЙ ВЕКА
 		</text>
-		<rect x={-270} y={158} width={540} height={118} rx={14} fill="#0e1330" />
-		<text x={0} y={225} textAnchor="middle" fontSize={52} fontFamily={FONT} fontWeight={800} fill="#ffffff">
+		<rect x={-370} y={156} width={740} height={140} rx={14} fill="#0e1330" />
+		<text x={0} y={246} textAnchor="middle" fontSize={70} fontFamily={FONT} fontWeight={800} fill="#ffffff">
 			ГАЛКИН — АДЕБИ
 		</text>
 	</g>

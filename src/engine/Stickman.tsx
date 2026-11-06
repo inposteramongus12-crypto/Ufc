@@ -381,8 +381,8 @@ export const Stickman: React.FC<Props> = (p) => {
 					{p.hood ? <path d={`M${-R - 16},${-6} C${-R - 14},${-R - 26} ${R + 6},${-R - 30} ${R + 8},${-14}`} stroke={color} strokeWidth={9} fill="none" strokeLinecap="round" /> : null}
 					{acc.includes('ringlight') ? (
 						<>
-							<circle cx={-12} cy={-6} r={R + 30} fill="none" stroke="#fff6dc" strokeWidth={9} opacity={0.95} />
-							<circle cx={-12} cy={-6} r={R + 30} fill="none" stroke="#fff6dc" strokeWidth={22} opacity={0.18} />
+							<circle cx={-12} cy={-6} r={R + 22} fill="none" stroke="#fff6dc" strokeWidth={8} opacity={0.95} />
+							<circle cx={-12} cy={-6} r={R + 22} fill="none" stroke="#fff6dc" strokeWidth={18} opacity={0.18} />
 						</>
 					) : null}
 					<circle r={R} fill="#000" />

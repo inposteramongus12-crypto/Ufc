@@ -20,7 +20,8 @@ for fn in sorted(glob.glob(os.path.join(sys.argv[1], 'f*.png'))):
             bw, bh = sl[1].stop - sl[1].start, sl[0].stop - sl[0].start
             white = ((im[sl[0], sl[1], 0] > 215) & (im[sl[0], sl[1], 1] > 215) & (im[sl[0], sl[1], 2] > 200)).sum()
             if name == 'plate' and white < 0.015 * bw * bh: continue
-            if name == 'plate' and (bh > 130 or area / (bw * bh) < 0.55 or bw < 2.2 * bh): continue
+            # pills (3:1) and stacked plates (≈1.7:1) both count; up to 300 px tall at half scale (zoomed-in shots)
+            if name == 'plate' and (bh > 300 or area / (bw * bh) < 0.55 or bw < 1.25 * bh): continue
             if name == 'card' and area / (bw * bh) < 0.6: continue
             x0, x1, y0, y1 = xs.start, xs.stop, ys.start, ys.stop
             sides = []
