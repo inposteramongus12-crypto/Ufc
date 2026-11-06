@@ -9,6 +9,7 @@ const STAND: Pose = {lean: 0, head: 0, armB: [-8, 10], armF: [8, 10], legB: [-4,
 const GUARD: Pose = {lean: 4, head: 0, armB: [38, 105], armF: [58, 100], legB: [-10, 8], legF: [12, 6]};
 const SHOW: Pose = {lean: 0, head: 0, armB: [-8, 10], armF: [58, 62], legB: [-4, 0], legF: [4, 0]};
 const HIPS: Pose = {lean: 0, head: 0, armB: [-24, 80], armF: [24, 80], legB: [-8, 0], legF: [8, 0]};
+const WIDE: Pose = {lean: 0, head: 0, armB: [-38, 12], armF: [38, 12], legB: [-10, 0], legF: [10, 0]}; // руки в стороны: пояс виден
 const WAVE: Pose = {lean: 0, head: 0, armB: [-8, 10], armF: [150, 20], legB: [-4, 0], legF: [4, 0]};
 
 type Item = {who: string; name: string; role: string; pose: Pose; mouth?: 'smile' | 'smirk' | 'line' | 'open'};
@@ -19,7 +20,7 @@ const ITEMS: Item[] = [
 	{who: 'senya', name: 'Сеня Галкин', role: 'боец, готов всегда', pose: GUARD, mouth: 'smile'},
 	{who: 'tayo', name: 'Тайо Адеби', role: 'боец, облачко', pose: GUARD, mouth: 'line'},
 	{who: 'voron', name: 'Ворон', role: 'чемпион, облачко', pose: STAND, mouth: 'smirk'},
-	{who: 'heavy', name: 'Тяжеловес', role: 'облачко', pose: STAND, mouth: 'line'},
+	{who: 'heavy', name: 'Тяжеловес', role: 'облачко', pose: WIDE, mouth: 'line'},
 ];
 
 const COLW = 480;

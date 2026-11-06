@@ -100,7 +100,7 @@ export const Actor: React.FC<
 	const isHero = who === STORY.hero;
 	const ak = isHero ? heroAgeK(gf) : 0;
 	const grow = 1 + (STORY.heroGrow ?? 0) * ak;
-	const scale = s * grow;
+	const scale = s * (base.scale ?? 1) * grow;
 	const y = (seat !== undefined ? seat : floor - 157 * scale) - bob * scale;
 	const id = uid ?? who + seed + '-' + Math.round(x);
 	// horizontal motion blur from speed: only fast moves smear, a walk stays readable
@@ -110,13 +110,13 @@ export const Actor: React.FC<
 			id={id}
 			x={x}
 			y={y}
-			scale={scale}
 			pose={rest.pose ?? idle(gf, seed + x / 100)}
 			blink={rest.blink ?? blinkAt(gf, seed + x)}
 			talk={talk}
 			age={isHero && STORY.heroAge ? ak : rest.age}
 			{...base}
 			{...rest}
+			scale={scale}
 		/>
 	);
 	return (

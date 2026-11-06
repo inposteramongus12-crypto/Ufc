@@ -71,6 +71,8 @@ type Props = {
 	acc?: Acc[];
 	// boxing gloves on both hands (colour)
 	glove?: string;
+	// torso width multiplier (heavyweights)
+	bulk?: number;
 	// belt plate colour (acc 'belt')
 	beltColor?: string;
 	chestText?: string;
@@ -261,7 +263,7 @@ export const Stickman: React.FC<Props> = (p) => {
 	const fid = 'rim-' + p.id;
 	const torsoTop = -T - 6;
 	const age = p.age ?? 0;
-	const bw = 30 * (1 + 0.18 * age);
+	const bw = 30 * (1 + 0.18 * age) * (p.bulk ?? 1);
 	const acc = p.acc ?? [];
 	return (
 		<g transform={`translate(${p.x},${p.y}) scale(${scale * facing * (1 + (p.squash ?? 0))},${scale * (1 - (p.squash ?? 0))})`}>
