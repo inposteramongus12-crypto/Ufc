@@ -190,6 +190,7 @@ export const FlashBurst: React.FC<{x: number; y: number; t: number; r?: number}>
 /* ratings table: three rows; the third is handwritten (Caveat). */
 export const RatingBoard: React.FC<{x: number; y: number; s?: number; hand: number; f: number; away?: number; off?: number}> = ({x, y, s = 1, hand, f, away = 0, off = 0}) => (
 	<g transform={`translate(${x},${y}) scale(${s})`}>
+		<g opacity={1 - off}>
 		<rect x={-600} y={-340} width={1200} height={680} rx={34} fill="#fbf8ef" stroke="#0d0d1c" strokeWidth={6} />
 		<rect x={-600} y={-340} width={1200} height={100} rx={34} fill="#2a2f4a" />
 		<text x={0} y={-270} textAnchor="middle" fontSize={56} fontFamily={FONT} fontWeight={900} fill="#fff">
@@ -207,7 +208,7 @@ export const RatingBoard: React.FC<{x: number; y: number; s?: number; hand: numb
 		</text>
 		<rect x={-480} y={-6} width={560} height={30} rx={15} fill="#cdd1de" />
 		<rect x={-560} y={50} width={760} height={20} rx={10} fill="#cdd1de" />
-		<g transform={`translate(${away * 1100},${-away * 260}) rotate(${away * 24} -560 196)`} opacity={1 - away * 0.4}>
+		<g transform={`translate(${away * 1100},${-away * 260}) rotate(${away * 24} -560 196)`} opacity={(1 - away * 0.4) * (1 - off)}>
 			<text x={-560} y={190} fontSize={60} fontFamily={FONT} fontWeight={900} fill="#d9372b">
 				3
 			</text>
@@ -224,6 +225,7 @@ export const RatingBoard: React.FC<{x: number; y: number; s?: number; hand: numb
 				40 000
 			</text>
 		</g>
+				</g>
 		{off > 0 ? (
 			<g opacity={off}>
 				<rect x={-600} y={-340} width={1200} height={680} rx={34} fill="#07080f" />
@@ -379,9 +381,9 @@ export const BigScale: React.FC<{x: number; s?: number; text: string; c: string;
 	<g transform={`translate(${x},900) scale(${s})`}>
 		<rect x={-130} y={-34} width={260} height={34} rx={12} fill="#2c2f3a" />
 		<rect x={-110} y={-48} width={220} height={20} rx={8} fill="#cfd7e6" />
-		<rect x={196} y={-330} width={28} height={296} fill="#2c2f3a" />
-		<rect x={70} y={-480} width={300} height={150} rx={18} fill="#0b0d1c" stroke="#8fa3e8" strokeWidth={5} id={id} />
-		<text x={220} y={-374} textAnchor="middle" fontSize={56} fontFamily={FONT} fontWeight={900} fill={c}>
+		<rect x={306} y={-330} width={28} height={296} fill="#2c2f3a" />
+		<rect x={170} y={-480} width={300} height={150} rx={18} fill="#0b0d1c" stroke="#8fa3e8" strokeWidth={5} id={id} />
+		<text x={320} y={-374} textAnchor="middle" fontSize={56} fontFamily={FONT} fontWeight={900} fill={c}>
 			{text}
 		</text>
 	</g>

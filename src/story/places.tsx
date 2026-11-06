@@ -203,7 +203,7 @@ export const VipBox: React.FC<{f: number}> = ({f}) => (
 );
 
 /* low view at the fence of the cage (fight). */
-export const CageSide: React.FC<{f: number; shake?: number}> = ({f, shake = 0}) => (
+export const CageSide: React.FC<{f: number; shake?: number; up?: number}> = ({f, shake = 0, up = 0.7}) => (
 	<g transform={`translate(${Math.sin(f * 2.1) * shake},${Math.cos(f * 2.7) * shake})`}>
 		<rect x={-500} y={-300} width={2920} height={1700} fill="#090b1d" />
 		{[100, 380, 660, 940, 1220, 1500, 1780].map((x, i) => (
@@ -212,7 +212,7 @@ export const CageSide: React.FC<{f: number; shake?: number}> = ({f, shake = 0}) 
 				<circle cx={x} cy={120 + (i % 2) * 40} r={28} fill="#fff" />
 			</g>
 		))}
-		<Crowd seed="cs" x0={-200} x1={2120} y0={420} y1={600} n={70} f={f} color="#0d1128" up={0.7} />
+		<Crowd seed="cs" x0={-200} x1={2120} y0={420} y1={600} n={70} f={f} color="#0d1128" up={up} />
 		<rect x={-500} y={900} width={2920} height={400} fill="#d6d9e6" />
 		<rect x={-500} y={900} width={2920} height={18} fill="#8fa3e8" />
 		{Array.from({length: 26}).map((_, i) => (
@@ -328,9 +328,8 @@ export const Office: React.FC = () => (
 			<rect x={1580} y={850} width={210} height={20} rx={8} fill="#cfd7e6" />
 			<rect x={1650} y={600} width={26} height={260} fill="#2c2f3a" />
 			<rect x={1610} y={540} width={106} height={70} rx={10} fill="#0b0d1c" stroke="#8fa3e8" strokeWidth={4} />
-			<text x={1663} y={590} textAnchor="middle" fontSize={44} fontFamily={FONT} fontWeight={800} fill="#6ff0a0">
-				0.0
-			</text>
+			<rect x={1630} y={568} width={66} height={10} rx={4} fill="#6ff0a0" />
+			<rect x={1630} y={586} width={44} height={10} rx={4} fill="#6ff0a0" opacity={0.7} />
 		</g>
 		<ellipse cx={960} cy={440} rx={700} ry={360} fill="#fff3d0" opacity={0.1} style={{mixBlendMode: 'screen', filter: 'blur(30px)'}} />
 	</g>
@@ -360,7 +359,7 @@ export const Envelope: React.FC<{x: number; y: number; s?: number; open: number;
 export const Stamp: React.FC<{x: number; y: number; text: string; k: number; rot?: number; c?: string; size?: number}> = ({x, y, text, k, rot = -8, c = '#d9372b', size = 50}) =>
 	k <= 0 ? null : (
 		<g transform={`translate(${x},${y}) rotate(${rot}) scale(${1 + (1 - Math.min(1, k * 4)) * 1.4})`} opacity={Math.min(1, k * 3)}>
-			<rect x={-text.length * size * 0.34 - 20} y={-size * 0.76} width={text.length * size * 0.68 + 40} height={size * 1.52} rx={10} fill="none" stroke={c} strokeWidth={7} />
+			<rect x={-text.length * size * 0.43 - 28} y={-size * 0.76} width={text.length * size * 0.86 + 56} height={size * 1.52} rx={10} fill="none" stroke={c} strokeWidth={7} />
 			<text x={0} y={size * 0.32} textAnchor="middle" fontSize={size} fontFamily={FONT} fontWeight={900} fill={c} letterSpacing={3}>
 				{text}
 			</text>
@@ -410,9 +409,11 @@ export const Calendar: React.FC<{x: number; y: number; s?: number; shift: number
 			{Array.from({length: 28}).map((_, i) => (
 				<g key={i}>
 					<rect x={cxOf(i) - 30} y={cyOf(i) - 30} width={60} height={60} rx={10} fill="#eef0f6" />
-					<text x={cxOf(i)} y={cyOf(i) + 12} textAnchor="middle" fontSize={42} fontFamily={FONT} fontWeight={700} fill="#4a5070">
-						{i + 1}
-					</text>
+					{Math.abs(i - pos) < 0.6 ? null : (
+						<text x={cxOf(i)} y={cyOf(i) + 12} textAnchor="middle" fontSize={42} fontFamily={FONT} fontWeight={700} fill="#4a5070">
+							{i + 1}
+						</text>
+					)}
 				</g>
 			))}
 			<circle cx={px} cy={py} r={44 + glow * 8} fill="#d9372b" opacity={0.92} />

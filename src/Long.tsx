@@ -3,6 +3,7 @@ import {AbsoluteFill, Audio, Sequence, interpolate, staticFile, useCurrentFrame}
 import {AngleCtx, L, LINES, ShotCtx, TOTAL} from './kit/core';
 import {SHOT_TIMES, cutsFor} from './kit/coverage';
 import {EdgeCtx} from './kit/kit';
+import {EdgeProbe} from './kit/edgeprobe';
 import {WHIP_BLUR, WHIP_SHIFT, WHIP_ZOOM, whipAt} from './kit/whip';
 import {STORY} from './story/config';
 import {Caption} from './kit/graphics';
@@ -46,6 +47,7 @@ export const Long: React.FC<{sound?: boolean; edge?: boolean}> = ({sound = true,
 	const last = LINES[LINES.length - 1];
 	return (
 		<EdgeCtx.Provider value={edge}>
+		{edge ? <EdgeProbe /> : null}
 		<AbsoluteFill style={{background: '#000'}}>
 			<svg width={0} height={0} style={{position: 'absolute'}}>
 				<filter id="whipBlur" x="-20%" y="0%" width="140%" height="100%">

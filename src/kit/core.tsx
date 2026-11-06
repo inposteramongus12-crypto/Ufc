@@ -120,7 +120,7 @@ export const Actor: React.FC<
 		/>
 	);
 	return (
-		<g>
+		<g data-actor={who}>
 			{shadow && seat === undefined ? <ellipse cx={x} cy={floor + 4} rx={(66 - bob * 2) * scale} ry={11 * scale} fill="#000" opacity={0.22} style={{filter: 'blur(5px)'}} /> : null}
 			{blur > 0.6 ? (
 				<>

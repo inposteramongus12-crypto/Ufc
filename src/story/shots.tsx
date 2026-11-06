@@ -9,8 +9,11 @@ import type {ShotDef} from '../kit/coverage';
 import {camOn, clamp, ease, flash, mixCam, Stage, usePush} from '../kit/kit';
 import {Bubble, FONT} from '../kit/ui';
 import {guard, hit, hip} from './common';
+import {HookShot} from './hook';
 import {SHOTS456} from './shots456';
 import {SHOTS789} from './shots789';
+import {SHOTS10} from './shots10';
+import {SHOTS11} from './shots11';
 import {
 	Calendar, CageSide, ChatFlames, Contract, Crowd, DayPlate, Envelope, FL, HallFar, HeroPlate, HS, IS, Hand, Office, OctagonTop, Scoreboard, Stamp, Studio, TvLogo, VipBox, headTop,
 } from './places';
@@ -33,36 +36,8 @@ const dark = {filter: 'brightness(1.05)'} as React.CSSProperties;
 
 /* ---------------------------------------------------------------- PART 1: HOOK */
 
-/* 001 N: «Двадцать тысяч человек кричат одно и то же имя…» — the camera drifts over the empty octagon */
-const S01: React.FC = () => {
-	const {f, gf} = useShot();
-	const cam = usePush(camOn(930, 540, 1.0), camOn(1000, 580, 1.14));
-	return (
-		<Stage cam={cam} bg="#070914" light={{night: true, o: 0.3}} dust="#aebcff">
-			<Layer depth={1.5}>
-				<Svg>
-					<OctagonTop f={gf} />
-				</Svg>
-			</Layer>
-			<Layer depth={1.15}>
-				<Svg>
-					<Crowd seed="top1" x0={-200} x1={2120} y0={20} y1={170} n={34} f={f} color="#05070f" up={0.9} />
-					<Crowd seed="top2" x0={-200} x1={2120} y0={930} y1={1100} n={30} f={f} color="#05070f" up={0.9} />
-				</Svg>
-			</Layer>
-			<Layer depth={1}>
-				<Svg>
-					<DayPlate x={960} y={560} value={counterAt(gf)} s={1.5} />
-				</Svg>
-			</Layer>
-			<Layer depth={0.62}>
-				<Svg>
-					<Crowd seed="near" x0={-100} x1={2020} y0={1000} y1={1180} n={9} f={f} color="#02030a" up={1} />
-				</Svg>
-			</Layer>
-		</Stage>
-	);
-};
+/* 001 N: «Двадцать тысяч человек кричат одно и то же имя…» — the camera drifts over the empty octagon (see hook.tsx; the same component closes the video) */
+const S01 = HookShot;
 
 /* title on black (the 2 s pause after 001) */
 const S02: React.FC = () => {
@@ -730,4 +705,6 @@ export const SHOTS: ShotDef[] = [
 	{at: '027', C: S23},
 	...SHOTS456,
 	...SHOTS789,
+	...SHOTS10,
+	...SHOTS11,
 ];

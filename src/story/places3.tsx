@@ -224,7 +224,7 @@ export const Bus: React.FC<{x: number}> = ({x}) => (
 			БОЙ ВЕКА. ТУР
 		</text>
 		{[-220, 200].map((cx) => (
-			<circle key={cx} cx={cx} cy={-20} r={50} fill="#222" stroke="#0d0d1c" strokeWidth={5} />
+			<circle key={cx} cx={cx} cy={-2} r={44} fill="#222" stroke="#0d0d1c" strokeWidth={5} />
 		))}
 	</g>
 );

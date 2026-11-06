@@ -25,6 +25,9 @@ export const CAST: Record<string, CastMember> = {
 	tayo: {color: '#3fae4f', outfit: 'tee', hair: 'cap', hairColor: '#f5f5f0', glove: '#ff4fa0', rim: '#e8fff0', rimW: 2.4, shoe: '#f2f2f2'},
 	// Звезда в отпуске (облачко «ДАВАЙ!», без голоса): розовая, очки, шлёпанцы-жёлтые
 	star: {color: '#ee7fb0', outfit: 'tee', hair: 'none', acc: ['sunglasses'], rim: '#ffe3ef', rimW: 2.4, shoe: '#ffd34a'},
+	// рефери и ведущий турнира (без голоса, мелькают в части 11)
+	ref: {color: '#e9eef5', outfit: 'tee', hair: 'none', rim: '#ffffff', rimW: 2.4, shoe: '#111'},
+	host: {color: '#6a3fa0', outfit: 'suit', hair: 'short', rim: '#f0e6ff', rimW: 2.4, shoe: '#1d1530'},
 	// Ворон, чемпион-тяжеловес (огромный, но в кадре без пояса): тёмно-синий худи, широкий торс, тёмная чёлка, седые усы (без голоса, облачко)
 	voron: {color: '#2e3bb0', outfit: 'hoodie', hair: 'bob', hairColor: '#2b1d3a', acc: ['mustache'], scale: 1.18, bulk: 1.35, rim: '#e6e9ff', rimW: 2.4, shoe: '#1d2150'},
 	// тяжеловес: малиновый, самый высокий и самый широкий (bulk 1.5), седой, пояс виден (без голоса, облачко)
