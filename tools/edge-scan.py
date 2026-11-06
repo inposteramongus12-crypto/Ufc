@@ -1,5 +1,6 @@
 # reads out/edge/f*.png (rendered at half size), prints the frames where a plate/bubble/card touches the 60 px band
 import sys, glob, os
+VERBOSE = os.environ.get('EDGE_VERBOSE') == '1'  # also print every plate / card that was found and its margin to the frame edge
 from PIL import Image
 import numpy as np
 from scipy import ndimage
@@ -31,6 +32,8 @@ for fn in sorted(glob.glob(os.path.join(sys.argv[1], 'f*.png'))):
             if y1 > h - M: sides.append(f'bottom {2*(y1-(h-M))}px')
             # skip things that are the frame itself / huge backgrounds
             if (x1 - x0) > w * 0.9 and (y1 - y0) > h * 0.7: continue
+            if VERBOSE:
+                print('found', os.path.basename(fn), name, 'at', (2*x0, 2*y0, 2*x1, 2*y1), 'margin', 2*min(x0, y0, w-x1, h-y1), 'px')
             if sides:
                 bad += 1
                 print(os.path.basename(fn), name, 'at', (2*x0, 2*y0, 2*x1, 2*y1), ', '.join(sides))

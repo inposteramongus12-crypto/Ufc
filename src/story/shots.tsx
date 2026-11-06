@@ -9,6 +9,7 @@ import type {ShotDef} from '../kit/coverage';
 import {camOn, clamp, ease, flash, mixCam, Stage, usePush} from '../kit/kit';
 import {Bubble, FONT} from '../kit/ui';
 import {guard, hit, hip} from './common';
+import {SHOTS456} from './shots456';
 import {
 	Calendar, CageSide, ChatFlames, Contract, Crowd, DayPlate, Envelope, FL, HallFar, HeroPlate, HS, IS, Hand, Office, OctagonTop, Scoreboard, Stamp, Studio, TvLogo, VipBox, headTop,
 } from './places';
@@ -27,7 +28,7 @@ const Reveal: React.FC<{k: number; x: number; y: number; children: React.ReactNo
 	</g>
 );
 const spring01 = (f: number, t0: number, len = 12) => interpolate(f, [t0, t0 + len], [0, 1], {...clamp, easing: ease});
-const dark = {filter: 'brightness(0.55) contrast(1.1)'} as React.CSSProperties;
+const dark = {filter: 'brightness(1.05)'} as React.CSSProperties;
 
 /* ---------------------------------------------------------------- PART 1: HOOK */
 
@@ -117,13 +118,14 @@ const S03: React.FC = () => {
 					</Layer>
 					<Layer depth={1.2}>
 						<Svg>
-							<ellipse cx={900} cy={600} rx={420} ry={520} fill="#e8f0ff" opacity={0.34} style={{filter: 'blur(36px)'}} />
+							<ellipse cx={900} cy={600} rx={420} ry={520} fill="#e8f0ff" opacity={0.3} style={{filter: 'blur(36px)'}} />
+							<polygon points="760,-60 1040,-60 1180,930 620,930" fill="#fff6dc" opacity={0.32} style={{filter: 'blur(14px)', mixBlendMode: 'screen'}} />
 						</Svg>
 					</Layer>
 					<Layer depth={1}>
 						<Svg>
 							<g style={dark}>
-								<Actor who="hero" x={900} floor={FL} s={HS} facing={1} faceTurn={0} look={[0, 0]} rim="#ffffff" rimW={5} pose={{...idle(gf, 3), armF: [18, 100], armB: [10, 100], lean: 2}} uid="h3" shadow={false} />
+								<Actor who="hero" x={900} floor={FL} s={HS} facing={1} faceTurn={0} look={[0, 0]} color="#ffd45a" rim="#ffffff" rimW={7} light={[0, -6]} pose={{...idle(gf, 3), armF: [18, 100], armB: [10, 100], lean: 2}} uid="h3" shadow={false} />
 							</g>
 						</Svg>
 					</Layer>
@@ -650,7 +652,7 @@ const S22: React.FC = () => {
 					<circle cx={1104} cy={176} r={9} fill="#6ff0a0" />
 					<TvLogo x={1380} y={390} s={1.5} />
 					<Actor who="hero" x={760} floor={FL} s={HS} facing={1} faceTurn={0.2} look={[0.3, 0]} mouth="smile" pose={hp} handF={pt > 0.4 ? 'point' : undefined} uid="h22" />
-					<HeroPlate x={760} s={0.95} />
+					<HeroPlate x={760} s={0.95} y={headTop(HS) - 84} />
 					{bub > 0 ? (
 						<Bubble x={1380} y={700} w={740} h={190} t={bub} tail={[0, -150]}>
 							<text x={0} y={-8} textAnchor="middle" fontSize={56} fontFamily={FONT} fontWeight={900} fill="#2a2f4a">
@@ -698,7 +700,7 @@ const S23: React.FC = () => {
 const S28: React.FC = () => (
 	<AbsoluteFill style={{background: '#0b0d1e', alignItems: 'center', justifyContent: 'center', fontFamily: FONT, fontWeight: 800, color: '#fff', fontSize: 72, textAlign: 'center'}}>
 		<div>
-			ЧАСТИ 4–11
+			ЧАСТИ 7–11
 			<div style={{fontSize: 54, color: '#ffc94a', marginTop: 12}}>сцены ещё не написаны</div>
 		</div>
 	</AbsoluteFill>
@@ -725,5 +727,6 @@ export const SHOTS: ShotDef[] = [
 	{at: '024', C: S21},
 	{at: '025', C: S22},
 	{at: '027', C: S23},
-	{at: '028', C: S28},
+	...SHOTS456,
+	{at: '053', C: S28},
 ];

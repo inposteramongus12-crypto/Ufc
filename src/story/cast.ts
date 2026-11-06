@@ -23,8 +23,10 @@ export const CAST: Record<string, CastMember> = {
 	senya: {sp: 'SENYA', color: '#2f6fd8', outfit: 'tee', hair: 'spiky', hairColor: '#5a3a22', glove: '#f4f4f4', rim: '#e6f0ff', rimW: 2.4, shoe: '#f2f2f2'},
 	// Тайо Адеби: зелёный, кепка, розовые перчатки (без голоса, облачко)
 	tayo: {color: '#3fae4f', outfit: 'tee', hair: 'cap', hairColor: '#f5f5f0', glove: '#ff4fa0', rim: '#e8fff0', rimW: 2.4, shoe: '#f2f2f2'},
+	// Звезда в отпуске (облачко «ДАВАЙ!», без голоса): розовая, очки, шлёпанцы-жёлтые
+	star: {color: '#ee7fb0', outfit: 'tee', hair: 'none', acc: ['sunglasses'], rim: '#ffe3ef', rimW: 2.4, shoe: '#ffd34a'},
 	// Ворон, чемпион-тяжеловес (огромный, но в кадре без пояса): тёмно-синий худи, широкий торс, тёмная чёлка, седые усы (без голоса, облачко)
-	voron: {color: '#2e3bb0', outfit: 'hoodie', hair: 'bob', hairColor: '#2b1d3a', acc: ['mustache'], age: 0.5, scale: 1.18, bulk: 1.35, rim: '#e6e9ff', rimW: 2.4, shoe: '#1d2150'},
+	voron: {color: '#2e3bb0', outfit: 'hoodie', hair: 'bob', hairColor: '#2b1d3a', acc: ['mustache'], scale: 1.18, bulk: 1.35, rim: '#e6e9ff', rimW: 2.4, shoe: '#1d2150'},
 	// тяжеловес: малиновый, самый высокий и самый широкий (bulk 1.5), седой, пояс виден (без голоса, облачко)
 	heavy: {color: '#c2409a', outfit: 'tee', hair: 'grey', age: 0.6, scale: 1.2, bulk: 1.5, acc: ['belt'], beltColor: '#e8eef2', rim: '#ffe0f2', rimW: 2.4, shoe: '#111'},
 };
@@ -36,5 +38,6 @@ export const CLOUDS: Record<string, Cloud> = {
 	tayo: {fill: '#e3f7e6', ink: '#14501f', stroke: '#3fae4f', shape: 'speech', label: 'Тайо Адеби'},
 	voron: {fill: '#e3e6ff', ink: '#141a5c', stroke: '#2e3bb0', shape: 'speech', label: 'Ворон'},
 	heavy: {fill: '#fbe3f1', ink: '#5a1445', stroke: '#c2409a', shape: 'speech', label: 'Тяжеловес'},
+	star: {fill: '#ffe3ef', ink: '#5a1740', stroke: '#ee7fb0', shape: 'speech', label: 'Звезда'},
 	tv: {fill: '#e4e6ec', ink: '#1a1f2b', stroke: '#9aa3b5', shape: 'screen', label: 'Телеканал'},
 };
