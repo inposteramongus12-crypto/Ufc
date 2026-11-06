@@ -70,6 +70,7 @@ const med = [...rate].sort((a, b) => a - b)[Math.floor(rate.length / 2)] || 1;
 out.forEach((o, i) => {
 	if (o.text && (rate[i] > med * 1.9 || rate[i] < med * 0.45)) say(`CHECK ${o.id}: ${(o.dur / FPS).toFixed(1)} s for ${o.text.length} letters — listen to it (cut off, extra noise or wrong text?)`);
 });
-const total = frame + 2 * FPS;
+const TAIL = 0.5; // seconds of picture after the last line (the final pause is in gaps.json)
+const total = frame + Math.round(TAIL * FPS);
 fs.writeFileSync(path.join(ROOT, outFile), JSON.stringify({fps: FPS, total, lines: out}));
 say(`timeline: ${out.length} lines, ${(total / FPS).toFixed(1)} s -> ${outFile}`);

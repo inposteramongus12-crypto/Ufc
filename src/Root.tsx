@@ -3,6 +3,7 @@ import {Composition, continueRender, delayRender, staticFile} from 'remotion';
 import {Long, LONG_FRAMES} from './Long';
 import {Short, SHORT_FRAMES} from './Short';
 import {Sheet, SheetProps, sheetSize} from './Sheet';
+import {CastSheet} from './Cast';
 import {PauseTime} from './reference/PauseTime';
 
 /* open-licence fonts from public/fonts, loaded before the first frame renders */
@@ -53,6 +54,7 @@ export const Root: React.FC = () => (
 				return {width: s.width, height: Math.ceil(s.height / 2) * 2};
 			}}
 		/>
+		<Composition id="Cast" component={CastSheet} durationInFrames={1} fps={30} width={1920} height={1080} />
 		{/* the approved style reference: 10 s, built by hand, shows what "our level" means */}
 		<Composition id="Reference" component={PauseTime} durationInFrames={300} fps={30} width={1920} height={1080} />
 	</>

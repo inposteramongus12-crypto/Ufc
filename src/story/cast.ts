@@ -1,28 +1,40 @@
+import React from 'react';
 import type {Base} from '../kit/actions';
+import {Tablet} from './props';
 
 /* Characters of this video. Key = id used in <Actor who="..."/>; `sp` = speaker code in
    lines.json (default: the id in upper case). Keep the hero yellow: the audience learns
    the colour in the first seconds and finds the hero in any crowd.
    Looks: color (hoodie), outfit hoodie|suit|gown|coat|apron|tee, hair none|spiky|bun|cap|
-   ponytail|grey|bob|short, hairColor, acc [headphones|mustache|glasses], shoe. */
+   ponytail|grey|bob|short, hairColor, acc [headphones|mustache|glasses|sunglasses|ringlight|belt],
+   glove (boxing gloves colour), beltColor, shoe.
+   Rule: one body colour per character, no two the same; the rest of the colour is in a prop.
+   No real brands, logos or faces. */
 export type CastMember = Base & {sp?: string};
 
 export const CAST: Record<string, CastMember> = {
-	hero: {color: '#f2b21c', hair: 'short', rim: '#fff0cc', rimW: 2.4},
-	trainer: {color: '#3a4256', outfit: 'tee', hair: 'cap', hairColor: '#c9342a', acc: ['mustache'], rim: '#e6ecff', rimW: 2.4, shoe: '#f2f2f2'},
-	tema: {color: '#d94a3a', hair: 'cap', hairColor: '#2f6fd8', rim: '#ffe0c8', rimW: 2.4, shoe: '#f2f2f2'},
-	vovan: {color: '#2f8f5a', outfit: 'tee', hair: 'none', rim: '#e8fff2', rimW: 2.4, shoe: '#111'},
-	kid: {color: '#4aa8d8', hair: 'spiky', hairColor: '#5a3a22', rim: '#e6f6ff', rimW: 2.4, shoe: '#f2f2f2'},
-	tmom: {color: '#3aa3a3', outfit: 'coat', hair: 'bun', hairColor: '#4a3426', rim: '#e6fffb', rimW: 2.4, shoe: '#f2f2f2'},
-	bro: {color: '#2f6fd8', hair: 'short', hairColor: '#5a3a22', rim: '#e6f0ff', rimW: 2.4, shoe: '#f2f2f2'},
-	sis: {color: '#e86aa0', hair: 'ponytail', hairColor: '#5a3a22', rim: '#ffe6f0', rimW: 2.4, shoe: '#f2f2f2'},
-	ygpa: {color: '#6b7f8e', outfit: 'tee', hair: 'short', hairColor: '#5a4636', rim: '#eef4ff', rimW: 2.4, shoe: '#2b2f3a'},
-	friend: {color: '#d94a3a', hair: 'cap', hairColor: '#2f6fd8', rim: '#ffe0c8', rimW: 2.4, shoe: '#f2f2f2'},
-	mom: {color: '#7a5cc4', outfit: 'gown', hair: 'bob', rim: '#ffe6c8', rimW: 2.4, shoe: '#2c2540'},
-	girl: {color: '#8b5cf6', hair: 'ponytail', hairColor: '#ffd34a', acc: ['headphones'], rim: '#efe2ff', rimW: 2.4, shoe: '#efe2ff'},
-	teacher: {color: '#8e3a4f', outfit: 'suit', hair: 'bun', acc: ['glasses'], rim: '#ffe6d6', rimW: 2.4, shoe: '#2b1d24'},
-	guard: {color: '#3a4256', outfit: 'suit', hair: 'cap', hairColor: '#28304a', acc: ['mustache'], rim: '#e6ecff', rimW: 2.4, shoe: '#111'},
-	doctor: {color: '#eef3f2', outfit: 'coat', hair: 'bob', rim: '#d8fff2', rimW: 2.4, shoe: '#2c3a40'},
-	seller: {color: '#3aa37a', outfit: 'apron', hair: 'bun', rim: '#e8fff2', rimW: 2.4, shoe: '#1d2b24'},
-	grandpa: {color: '#6b7f8e', outfit: 'tee', hair: 'grey', acc: ['glasses'], rim: '#eef4ff', rimW: 2.4, shoe: '#2b2f3a'},
+	// Костя Шпак, блогер: жёлтый, кольцевая лампа за головой (его студия)
+	hero: {color: '#f2b21c', hair: 'short', acc: ['ringlight'], rim: '#fff0cc', rimW: 2.4, shoe: '#f2f2f2'},
+	// Ирма Ларсен, матчмейкер: бирюзовый костюм, пучок, очки, планшет в руке
+	irma: {sp: 'IRMA', color: '#1fb5a8', outfit: 'suit', hair: 'bun', acc: ['glasses'], handItem: React.createElement(Tablet), rim: '#e6fffb', rimW: 2.4, shoe: '#16302e'},
+	// Рекс «Бульдозер» Бураков: красный, лысый, оранжевые очки, золотой пояс
+	rex: {sp: 'REX', color: '#d9372b', outfit: 'tee', hair: 'none', acc: ['sunglasses', 'belt'], beltColor: '#ffd34a', rim: '#ffe0c8', rimW: 2.4, shoe: '#111'},
+	// Сеня Галкин: синий, торчащие волосы, белые перчатки
+	senya: {sp: 'SENYA', color: '#2f6fd8', outfit: 'tee', hair: 'spiky', hairColor: '#5a3a22', glove: '#f4f4f4', rim: '#e6f0ff', rimW: 2.4, shoe: '#f2f2f2'},
+	// Тайо Адеби: зелёный, кепка, розовые перчатки (без голоса, облачко)
+	tayo: {color: '#3fae4f', outfit: 'tee', hair: 'cap', hairColor: '#f5f5f0', glove: '#ff4fa0', rim: '#e8fff0', rimW: 2.4, shoe: '#f2f2f2'},
+	// Ворон, чемпион: фиолетовый худи, тёмная чёлка, седые усы (без голоса, облачко)
+	voron: {color: '#8b4fd6', outfit: 'hoodie', hair: 'bob', hairColor: '#2b1d3a', acc: ['mustache'], rim: '#f0e6ff', rimW: 2.4, shoe: '#2c2540'},
+	// тяжеловес: малиновый, крупнее всех, седой, пояс (без голоса, облачко)
+	heavy: {color: '#c2409a', outfit: 'tee', hair: 'grey', age: 0.6, scale: 1.22, acc: ['belt'], beltColor: '#e8eef2', rim: '#ffe0f2', rimW: 2.4, shoe: '#111'},
+};
+
+/* Облачка без голоса: реплика показывается текстом в пузыре этого цвета.
+   Телеканала нет в кадре как человека: это только облачко и безымянный логотип. */
+export type Cloud = {fill: string; ink: string; stroke: string; shape: 'speech' | 'screen'; label: string};
+export const CLOUDS: Record<string, Cloud> = {
+	tayo: {fill: '#e3f7e6', ink: '#14501f', stroke: '#3fae4f', shape: 'speech', label: 'Тайо Адеби'},
+	voron: {fill: '#efe3ff', ink: '#3a1d66', stroke: '#8b4fd6', shape: 'speech', label: 'Ворон'},
+	heavy: {fill: '#fbe3f1', ink: '#5a1445', stroke: '#c2409a', shape: 'speech', label: 'Тяжеловес'},
+	tv: {fill: '#e4e6ec', ink: '#1a1f2b', stroke: '#9aa3b5', shape: 'screen', label: 'Телеканал'},
 };

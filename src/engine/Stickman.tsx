@@ -4,7 +4,7 @@ import {darken, lighten} from './color';
 export type Expr = 'normal' | 'angry' | 'sad' | 'sleepy' | 'wide' | 'worried';
 export type Hair = 'none' | 'spiky' | 'bun' | 'cap' | 'ponytail' | 'grey' | 'bob' | 'short';
 export type Outfit = 'hoodie' | 'suit' | 'gown' | 'coat' | 'apron' | 'tee';
-export type Acc = 'headphones' | 'mustache' | 'glasses';
+export type Acc = 'headphones' | 'mustache' | 'glasses' | 'sunglasses' | 'ringlight' | 'belt';
 export type Mouth = 'line' | 'frown' | 'open' | 'smile' | 'flat' | 'smirk' | 'none';
 export type HandShape = 'fist' | 'point' | 'snap';
 
@@ -69,6 +69,10 @@ type Props = {
 	// 0..1 speech loudness; opens the mouth while the character talks
 	talk?: number;
 	acc?: Acc[];
+	// boxing gloves on both hands (colour)
+	glove?: string;
+	// belt plate colour (acc 'belt')
+	beltColor?: string;
 	chestText?: string;
 	// draw the front arm over the face (hand to cheek, facepalm, finger to lips)
 	armOver?: boolean;
@@ -282,7 +286,7 @@ export const Stickman: React.FC<Props> = (p) => {
 					</>
 				)}
 				<Limb pts={aB} w={23} c={back} />
-				<circle cx={aB[2][0]} cy={aB[2][1]} r={9.5} fill="#0b0b0d" />
+				<circle cx={aB[2][0]} cy={aB[2][1]} r={p.glove ? 14 : 9.5} fill={p.glove ? darken(p.glove, 0.25) : '#0b0b0d'} stroke={p.glove ? '#0b0b0d' : undefined} strokeWidth={p.glove ? 3 : 0} />
 				{/* front leg */}
 				{p.hideLegs ? null : (
 					<>
@@ -333,6 +337,14 @@ export const Stickman: React.FC<Props> = (p) => {
 							<circle cx={-12} cy={-90} r={3} fill={darken(color, 0.15)} />
 						</>
 					) : null}
+					{acc.includes('belt') ? (
+						<>
+							<rect x={-bw} y={-30} width={bw * 2} height={20} fill="#1a1208" />
+							<rect x={-bw + 2} y={-28} width={bw * 2 - 4} height={16} fill="#caa23a" />
+							<rect x={-3} y={-35} width={36} height={30} rx={8} fill={p.beltColor ?? '#ffd34a'} stroke="#1a1208" strokeWidth={3} />
+							<circle cx={15} cy={-20} r={7} fill="#1a1208" opacity={0.55} />
+						</>
+					) : null}
 					{p.chestText ? (
 						<g transform={`translate(4,${torsoTop + 40}) rotate(-4)`}>
 							<rect x={-26} y={-10} width={52} height={20} rx={3} fill="#fbfaf4" stroke="#c94a3a" strokeWidth={2} />
@@ -358,13 +370,19 @@ export const Stickman: React.FC<Props> = (p) => {
 						);
 					return null;
 				})()}
-				<circle cx={aF[2][0]} cy={aF[2][1]} r={10} fill="#0b0b0d" />
+				<circle cx={aF[2][0]} cy={aF[2][1]} r={p.glove ? 15 : 10} fill={p.glove ?? '#0b0b0d'} stroke={p.glove ? '#0b0b0d' : undefined} strokeWidth={p.glove ? 3 : 0} />
 				{/* head */}
 				<line x1={add(hip, up, T - 10)[0]} y1={add(hip, up, T - 10)[1]} x2={headC[0]} y2={headC[1]} stroke="#000" strokeWidth={12} />
 				<g transform={`translate(${headC[0]},${headC[1]}) rotate(${pose.head + lean * 0.25})`}>
 					<HeadShape hair={hair} hairColor={hairColor} front={false} />
 					{p.hood ? <ellipse cx={-7} cy={-3} rx={R + 13} ry={R + 12} fill={sh} /> : null}
 					{p.hood ? <path d={`M${-R - 16},${-6} C${-R - 14},${-R - 26} ${R + 6},${-R - 30} ${R + 8},${-14}`} stroke={color} strokeWidth={9} fill="none" strokeLinecap="round" /> : null}
+					{acc.includes('ringlight') ? (
+						<>
+							<circle cx={-12} cy={-6} r={R + 30} fill="none" stroke="#fff6dc" strokeWidth={9} opacity={0.95} />
+							<circle cx={-12} cy={-6} r={R + 30} fill="none" stroke="#fff6dc" strokeWidth={22} opacity={0.18} />
+						</>
+					) : null}
 					<circle r={R} fill="#000" />
 					<HeadShape hair={hair} hairColor={hairColor} front />
 					{acc.includes('headphones') ? (
@@ -395,6 +413,14 @@ export const Stickman: React.FC<Props> = (p) => {
 						<circle cx={eL[0]} cy={eL[1]} r={erx + 4} />
 						<circle cx={eR[0]} cy={eR[1]} r={erx + 4} />
 						<line x1={eL[0] + erx + 4} y1={eL[1]} x2={eR[0] - erx - 4} y2={eR[1]} />
+					</g>
+				) : null}
+				{acc.includes('sunglasses') ? (
+					<g>
+						<rect x={eL[0] - erx - 6} y={eL[1] - ery - 2} width={erx * 2 + 12} height={ery * 2 + 4} rx={9} fill="#0b0b0d" stroke="#ff6a3c" strokeWidth={3.5} />
+						<rect x={eR[0] - erx - 6} y={eR[1] - ery - 2} width={erx * 2 + 12} height={ery * 2 + 4} rx={9} fill="#0b0b0d" stroke="#ff6a3c" strokeWidth={3.5} />
+						<line x1={eL[0] + erx + 6} y1={eL[1] - 3} x2={eR[0] - erx - 6} y2={eR[1] - 3} stroke="#ff6a3c" strokeWidth={3.5} />
+						<line x1={eL[0] - erx - 2} y1={eL[1] - 8} x2={eL[0] - 2} y2={eL[1] - 8} stroke="#fff" strokeWidth={2.5} strokeLinecap="round" opacity={0.7} />
 					</g>
 				) : null}
 				{acc.includes('mustache') ? <path d={`M${mx - 13},${17} q6,-7 13,-2 q7,-5 13,2 q-6,3 -13,1 q-7,2 -13,-1 z`} fill="#c9c9cf" /> : null}
