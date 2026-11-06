@@ -10,6 +10,7 @@ import {camOn, clamp, ease, flash, mixCam, Stage, usePush} from '../kit/kit';
 import {Bubble, FONT} from '../kit/ui';
 import {guard, hit, hip} from './common';
 import {SHOTS456} from './shots456';
+import {SHOTS789} from './shots789';
 import {
 	Calendar, CageSide, ChatFlames, Contract, Crowd, DayPlate, Envelope, FL, HallFar, HeroPlate, HS, IS, Hand, Office, OctagonTop, Scoreboard, Stamp, Studio, TvLogo, VipBox, headTop,
 } from './places';
@@ -728,5 +729,5 @@ export const SHOTS: ShotDef[] = [
 	{at: '025', C: S22},
 	{at: '027', C: S23},
 	...SHOTS456,
-	{at: '053', C: S28},
+	...SHOTS789,
 ];

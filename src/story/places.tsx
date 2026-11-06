@@ -57,34 +57,42 @@ export const DayPlate: React.FC<{x: number; y: number; value: number; s?: number
 	);
 };
 
-/* the plate over a hero: pops and rings whenever the counter changes. It is kept inside the safe zone of the
-   SCREEN (60 px from every edge) whatever the camera and the whip-pan do: its position is corrected from the
-   final camera, so a hero near the edge never drags it out of the frame. */
+/* Keeps a box inside the safe zone of the SCREEN (60 px from every edge) whatever the camera and the whip-pan do.
+   (x, y) is the box anchor in the depth-1 layer, left/right/top/bottom its extent in world units around the anchor.
+   Returns the correction in world units. Used by the day plate, wall signs and captions. */
 export const SAFE = 60;
-export const HeroPlate: React.FC<{x: number; s?: number; hs?: number; y?: number; blink?: number; dx?: number}> = ({x, s = 0.95, hs = HS, y, blink = 1, dx = 0}) => {
+export const useSafeShift = (x: number, y: number, b: {left: number; right: number; top: number; bottom?: number}) => {
 	const {gf} = useShot();
 	const cam = useCam();
-	const v = counterAt(gf);
-	const ago = counterChangedAgo(gf);
-	const pop = 1 + 0.2 * Math.exp(-Math.max(0, ago) / 4) * (ago >= 0 && ago < 40 ? 1 : 0);
-	const ring = interpolate(ago, [0, 14], [0, 1], clamp);
-	const py = y ?? headTop(hs) - 64; // 64 px above the head: the lamp ring (radius R+22) stays below the plate
-	// anchor on the screen (depth-1 layer), then through the whip-pan
 	const w = whipAt(gf);
 	const S = w ? 1 + WHIP_ZOOM * w.k : 1;
 	const shift = w ? w.dir * WHIP_SHIFT * w.k : 0;
 	const m = cam.zoom * S; // screen pixels per world pixel
-	const ax = 960 + S * (960 + cam.zoom * (x - 960) - cam.x - 960) + shift;
-	const ay = 540 + S * (540 + cam.zoom * (py - 540) - cam.y - 540);
-	const sc = s * pop;
-	const left = (PLATE_W / 2 + 10 + dx) * sc * m;
-	const right = (PLATE_W / 2 + 10 - dx) * sc * m;
-	const top = (PLATE_H + 34) * sc * m;
+	const ax = 960 + S * (cam.zoom * (x - 960) - cam.x) + shift;
+	const ay = 540 + S * (cam.zoom * (y - 540) - cam.y);
 	let cx = 0;
 	let cy = 0;
-	if (ax - left < SAFE) cx = (SAFE - (ax - left)) / m;
-	if (ax + right > 1920 - SAFE) cx = -(ax + right - (1920 - SAFE)) / m;
-	if (ay - top < SAFE) cy = (SAFE - (ay - top)) / m;
+	if (ax - b.left * m < SAFE) cx = (SAFE - (ax - b.left * m)) / m;
+	if (ax + b.right * m > 1920 - SAFE) cx = -(ax + b.right * m - (1920 - SAFE)) / m;
+	if (ay - b.top * m < SAFE) cy = (SAFE - (ay - b.top * m)) / m;
+	if (b.bottom !== undefined && ay + b.bottom * m > 1080 - SAFE) cy = -(ay + b.bottom * m - (1080 - SAFE)) / m;
+	return {cx, cy};
+};
+export const SafeBox: React.FC<{x: number; y: number; left: number; right: number; top: number; bottom?: number; children: React.ReactNode}> = ({x, y, left, right, top, bottom, children}) => {
+	const {cx, cy} = useSafeShift(x, y, {left, right, top, bottom});
+	return <g transform={`translate(${cx},${cy})`}>{children}</g>;
+};
+
+/* the plate over a hero: pops and rings whenever the counter changes; 84 px above the head so the lamp ring never reaches it */
+export const HeroPlate: React.FC<{x: number; s?: number; hs?: number; y?: number; blink?: number; dx?: number}> = ({x, s = 0.95, hs = HS, y, blink = 1, dx = 0}) => {
+	const {gf} = useShot();
+	const v = counterAt(gf);
+	const ago = counterChangedAgo(gf);
+	const pop = 1 + 0.2 * Math.exp(-Math.max(0, ago) / 4) * (ago >= 0 && ago < 40 ? 1 : 0);
+	const ring = interpolate(ago, [0, 14], [0, 1], clamp);
+	const py = y ?? headTop(hs) - 84;
+	const sc = s * pop;
+	const {cx, cy} = useSafeShift(x, py, {left: (PLATE_W / 2 + 10 + dx) * sc, right: (PLATE_W / 2 + 10 - dx) * sc, top: (PLATE_H + 34) * sc});
 	return (
 		<g transform={`translate(${cx},${cy})`}>
 			{ago >= 0 && ago < 14 ? <ellipse cx={x} cy={py - 120 * s} rx={120 + ring * 220} ry={70 + ring * 120} fill="none" stroke="#ffe08a" strokeWidth={8 * (1 - ring)} opacity={1 - ring} /> : null}
@@ -349,11 +357,11 @@ export const Envelope: React.FC<{x: number; y: number; s?: number; open: number;
 	</g>
 );
 
-export const Stamp: React.FC<{x: number; y: number; text: string; k: number; rot?: number; c?: string}> = ({x, y, text, k, rot = -8, c = '#d9372b'}) =>
+export const Stamp: React.FC<{x: number; y: number; text: string; k: number; rot?: number; c?: string; size?: number}> = ({x, y, text, k, rot = -8, c = '#d9372b', size = 50}) =>
 	k <= 0 ? null : (
 		<g transform={`translate(${x},${y}) rotate(${rot}) scale(${1 + (1 - Math.min(1, k * 4)) * 1.4})`} opacity={Math.min(1, k * 3)}>
-			<rect x={-text.length * 17 - 20} y={-38} width={text.length * 34 + 40} height={76} rx={10} fill="none" stroke={c} strokeWidth={7} />
-			<text x={0} y={16} textAnchor="middle" fontSize={50} fontFamily={FONT} fontWeight={900} fill={c} letterSpacing={3}>
+			<rect x={-text.length * size * 0.34 - 20} y={-size * 0.76} width={text.length * size * 0.68 + 40} height={size * 1.52} rx={10} fill="none" stroke={c} strokeWidth={7} />
+			<text x={0} y={size * 0.32} textAnchor="middle" fontSize={size} fontFamily={FONT} fontWeight={900} fill={c} letterSpacing={3}>
 				{text}
 			</text>
 		</g>

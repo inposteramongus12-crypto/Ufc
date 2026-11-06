@@ -22,9 +22,10 @@ fs.mkdirSync(outDir, {recursive: true});
 const serveUrl = await bundle({entryPoint: path.join(ROOT, 'src', 'index.ts')});
 const target = await selectComposition({serveUrl, id: comp, chromiumOptions: {gl: 'angle'}});
 const frames = [];
-for (let t = from + every / 2; t < to; t += every) frames.push(Math.round(t * 30));
+if (a.includes('--frames')) frames.push(...val('--frames', '').split(',').map(Number)); // explicit list (frames), e.g. for re-shooting only the changed shots
+else for (let t = from + every / 2; t < to; t += every) frames.push(Math.round(t * 30));
 const ok = frames.filter((f) => f < target.durationInFrames);
-const cols = per <= 8 ? 4 : 5;
+const cols = Number(val('--cols', 0)) || (per <= 8 ? 4 : 5);
 for (let i = 0, n = 1; i < ok.length; i += per, n++) {
 	const part = ok.slice(i, i + per);
 	const props = {comp, frames: part, cols, title: `${comp} · ${(part[0] / 30).toFixed(1)}–${(part.at(-1) / 30).toFixed(1)} с · каждые ${every} с`};

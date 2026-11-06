@@ -4,7 +4,7 @@ import {Stickman} from '../engine/Stickman';
 import {FONT, HAND} from '../kit/ui';
 import {clamp} from '../kit/kit';
 import {CAST} from './cast';
-import {Crowd} from './places';
+import {Crowd, SafeBox} from './places';
 
 /* Places and props for parts 4–6 (voting, buying the stars, the two rookies get dropped).
    Same rules as places.tsx: world 1920×1080, floor y = 900, nothing under 40 px. */
@@ -65,7 +65,7 @@ export const VoteChart: React.FC<{x: number; y: number; s?: number; k1: number; 
 	const nf = (n: number) => {
 		const t = String(Math.round(n));
 		let o = '';
-		for (let i = 0; i < t.length; i++) o += (i > 0 && (t.length - i) % 3 === 0 ? '\u2009' : '') + t[i];
+		for (let i = 0; i < t.length; i++) o += (i > 0 && (t.length - i) % 3 === 0 ? '\u00A0' : '') + t[i];
 		return o;
 	};
 	return (
@@ -81,16 +81,16 @@ export const VoteChart: React.FC<{x: number; y: number; s?: number; k1: number; 
 				ВСЕ ОСТАЛЬНЫЕ БОИ
 			</text>
 			<rect x={-520} y={-96} width={1040} height={84} rx={20} fill="#242a5a" />
-			<rect x={-520} y={-96} width={1040 * 0.8 * k1} height={84} rx={20} fill="#3fae4f" />
-			<text x={-520 + 1040 * 0.8 * k1 + 20} y={-36} fontSize={52} fontFamily={FONT} fontWeight={900} fill="#fff" opacity={k1 > 0.3 ? 1 : 0}>
+			<rect x={-520} y={-96} width={1040 * 0.6 * k1} height={84} rx={20} fill="#3fae4f" />
+			<text x={-520 + 1040 * 0.6 * k1 + 20} y={-36} fontSize={52} fontFamily={FONT} fontWeight={900} fill="#fff" opacity={k1 > 0.3 ? 1 : 0}>
 				{nf(1600000 * k1)}
 			</text>
 			<text x={-520} y={80} fontSize={46} fontFamily={FONT} fontWeight={800} fill="#ffd0c8">
 				КЕНГУРУ
 			</text>
 			<rect x={-520} y={104} width={1040} height={84} rx={20} fill="#242a5a" />
-			<rect x={-520} y={104} width={1040 * 0.2 * k2} height={84} rx={20} fill="#ff6a5a" />
-			<text x={-520 + 1040 * 0.2 * k2 + 20} y={164} fontSize={52} fontFamily={FONT} fontWeight={900} fill="#fff" opacity={k2 > 0.3 ? 1 : 0}>
+			<rect x={-520} y={104} width={1040 * 0.15 * k2} height={84} rx={20} fill="#ff6a5a" />
+			<text x={-520 + 1040 * 0.15 * k2 + 20} y={164} fontSize={52} fontFamily={FONT} fontWeight={900} fill="#fff" opacity={k2 > 0.3 ? 1 : 0}>
 				{nf(400000 * k2)}
 			</text>
 			<g opacity={interpolate(k2, [0.5, 0.9], [0, 1], clamp)}>
@@ -219,7 +219,7 @@ export const RatingBoard: React.FC<{x: number; y: number; s?: number; hand: numb
 					Реванш. Галкин — Адеби
 				</text>
 			</g>
-			<rect x={-560} y={226} width={1120 * Math.min(1, hand * 1.2) * 0.2} height={20} rx={10} fill="#ff6a5a" />
+			<rect x={-560} y={236} width={1120 * Math.min(1, hand * 1.2) * 0.2} height={20} rx={10} fill="#ff6a5a" />
 			<text x={560} y={196} textAnchor="end" fontSize={52} fontFamily={FONT} fontWeight={900} fill="#d9372b" opacity={hand > 0.9 ? 1 : 0}>
 				40 000
 			</text>
@@ -393,10 +393,6 @@ export const WeighRoom: React.FC = () => (
 		{Array.from({length: 24}).map((_, i) => (
 			<line key={i} x1={-500 + i * 130} y1={900} x2={-700 + i * 190} y2={1100} stroke="#7f8b97" strokeWidth={3} opacity={0.6} />
 		))}
-		<rect x={150} y={200} width={940} height={130} rx={26} fill="#2a3350" stroke="#ffc94a" strokeWidth={6} />
-		<text x={620} y={296} textAnchor="middle" fontSize={88} fontFamily={FONT} fontWeight={900} fill="#fff">
-			ВЗВЕШИВАНИЕ
-		</text>
 		{[160, 1760].map((x) => (
 			<g key={x}>
 				<rect x={x - 40} y={300} width={80} height={600} fill="#c3ccd6" />
@@ -440,4 +436,14 @@ export const CardList: React.FC<{x: number; y: number; s?: number; k: number}> =
 		<line x1={-500} y1={192} x2={-500 + 760 * k} y2={192} stroke="#ff4b4b" strokeWidth={14} strokeLinecap="round" />
 		<line x1={-500} y1={170} x2={-500 + 760 * Math.max(0, k * 1.4 - 0.4)} y2={216} stroke="#ff4b4b" strokeWidth={10} strokeLinecap="round" />
 	</g>
+);
+
+/* the «ВЗВЕШИВАНИЕ» sign: a real plate (#11142c), kept inside the safe zone of the screen. Put it in a depth-1 layer. */
+export const WeighSign: React.FC<{x: number; y: number}> = ({x, y}) => (
+	<SafeBox x={x} y={y} left={390} right={390} top={75} bottom={75}>
+		<rect x={x - 380} y={y - 65} width={760} height={130} rx={26} fill={NAVY} stroke="#ffc94a" strokeWidth={6} />
+		<text x={x} y={y + 30} textAnchor="middle" fontSize={88} fontFamily={FONT} fontWeight={900} fill="#fff">
+			ВЗВЕШИВАНИЕ
+		</text>
+	</SafeBox>
 );

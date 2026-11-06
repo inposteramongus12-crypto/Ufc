@@ -8,9 +8,9 @@ import type {ShotDef} from '../kit/coverage';
 import {camOn, clamp, ease, flash, mixCam, Extra, Stage, usePush} from '../kit/kit';
 import {Bubble, FONT, HAND} from '../kit/ui';
 import {bent, guard, hit, hip} from './common';
-import {CageSide, FL, HallFar, HeroPlate, HS, IS, Office, Studio, headTop} from './places';
+import {CageSide, FL, HallFar, HeroPlate, HS, IS, Office, SafeBox, Studio, headTop} from './places';
 import {
-	Beach, BeltProp, BigScale, Bolt, Bulldozer, CardList, CardsOnTable, Cheque, Cursor, FlashBurst, KardGrid, Pen, PressRoom, Portrait, RatingBoard, Scribble, Sparks, Steam, StreamScreen, TrainRoom, Umbrella, VoteChart, WeighRoom, Yard,
+	Beach, BeltProp, BigScale, Bolt, Bulldozer, CardList, CardsOnTable, Cheque, Cursor, FlashBurst, KardGrid, Pen, PressRoom, Portrait, RatingBoard, Scribble, Sparks, Steam, StreamScreen, TrainRoom, Umbrella, VoteChart, WeighRoom, WeighSign, Yard,
 } from './places2';
 
 /* Parts 4–6 (lines 028–052, 2:01–3:47). Plate «ДО ТУРНИРА N ДНЕЙ» follows the day table:
@@ -25,12 +25,14 @@ const slowPush = (f: number, len: number, cam: ReturnType<typeof camOn>, amt = 1
 const Cap: React.FC<{x: number; y: number; t: string; k: number; size?: number; c?: string}> = ({x, y, t, k, size = 56, c = '#ffc94a'}) => {
 	const w = t.length * size * 0.66 + 70;
 	return k <= 0 ? null : (
-		<g transform={`translate(${x},${y}) scale(${0.6 + 0.4 * k})`} opacity={Math.min(1, k * 2)}>
-			<rect x={-w / 2} y={-size * 0.95} width={w} height={size * 1.75} rx={size * 0.5} fill={NAVY} stroke={c} strokeWidth={5} />
-			<text x={0} y={size * 0.28} textAnchor="middle" fontSize={size} fontFamily={FONT} fontWeight={900} fill="#fff">
-				{t}
-			</text>
-		</g>
+		<SafeBox x={x} y={y} left={w / 2 + 6} right={w / 2 + 6} top={size * 0.95 + 6} bottom={size * 0.8 + 6}>
+			<g transform={`translate(${x},${y}) scale(${0.6 + 0.4 * k})`} opacity={Math.min(1, k * 2)}>
+				<rect x={-w / 2} y={-size * 0.95} width={w} height={size * 1.75} rx={size * 0.5} fill={NAVY} stroke={c} strokeWidth={5} />
+				<text x={0} y={size * 0.28} textAnchor="middle" fontSize={size} fontFamily={FONT} fontWeight={900} fill="#fff">
+					{t}
+				</text>
+			</g>
+		</SafeBox>
 	);
 };
 
@@ -75,9 +77,9 @@ const S25: React.FC = () => {
 	const total = interpolate(f, [t0 + 10, t0 + 150], [0, 2000000], {...clamp, easing: ease});
 	const fp = env(f, at('030'), at('030') + 44, 8, 10);
 	const ip = gesture('facepalm', {...idle(gf, 1), lean: 3}, fp, f);
-	const cam0 = pickCam(sp, {IRMA: camOn(1440, 520, 1.35)}, camOn(900, 520, 1.0));
+	const cam0 = pickCam(sp, {IRMA: camOn(1020, 520, 1.0)}, camOn(960, 520, 1.0));
 	return (
-		<Stage cam={slowPush(f, 210, cam0)} bg="#1b2150" light={{x: 30, y: 8, o: 0.3}}>
+		<Stage cam={slowPush(f, 210, cam0, 1.08)} bg="#1b2150" light={{x: 30, y: 8, o: 0.3}}>
 			<Layer depth={1.5}>
 				<Svg>
 					<Studio f={gf} lampOn={0.6} />
@@ -85,8 +87,8 @@ const S25: React.FC = () => {
 			</Layer>
 			<Layer depth={1}>
 				<Svg>
-					<VoteChart x={800} y={520} s={1} k1={k1} k2={k2} total={total} />
-					<Actor who="irma" x={1580} floor={FL} s={IS} facing={-1} faceTurn={0.3} look={[-0.8, 0.2]} mouth={fp > 0.3 ? 'flat' : 'flat'} pose={ip} armOver={fp > 0.5} uid="i25" />
+					<VoteChart x={860} y={520} s={1} k1={k1} k2={k2} total={total} />
+					<Actor who="irma" x={1610} floor={FL} s={IS} facing={-1} faceTurn={0.3} look={[-0.8, 0.2]} mouth={fp > 0.3 ? 'flat' : 'flat'} pose={ip} armOver={fp > 0.5} uid="i25" />
 				</Svg>
 			</Layer>
 		</Stage>
@@ -212,12 +214,12 @@ const S31: React.FC = () => {
 	const {f, gf, at} = useShot();
 	const t5 = at('035');
 	const t6 = at('036');
-	const cam = usePush(camOn(1120, 520, 1.1), camOn(1100, 520, 1.3));
+	const cam = usePush(camOn(1160, 520, 1.0), camOn(1130, 520, 1.15));
 	const away = sp01(f, t5 + 24, 16);
 	const sw = env(f, t5 + 14, t5 + 50, 8, 10);
 	const rowX = 1380 - 336 + 440 * sw * 0;
-	const tx = interpolate(sw, [0, 1], [1044, 1300]);
-	const hp = reach({...idle(gf, 3), lean: 4}, 'F', toLocal(tx, 677, 910, FL - 157 * HS, HS, 1), Math.max(sw, env(f, t5 - 6, t5 + 14, 6, 4)));
+	const tx = interpolate(sw, [0, 1], [944, 1290]);
+	const hp = reach({...idle(gf, 3), lean: 4}, 'F', toLocal(tx, 669, 810, FL - 157 * HS, HS, 1), Math.max(sw, env(f, t5 - 6, t5 + 14, 6, 4)));
 	const off = sp01(f, t6 + 8, 10);
 	void rowX;
 	return (
@@ -229,9 +231,9 @@ const S31: React.FC = () => {
 			</Layer>
 			<Layer depth={1}>
 				<Svg>
-					<RatingBoard x={1380} y={520} s={0.7} hand={1} f={f} away={away} off={off} />
-					<Actor who="hero" x={910} floor={FL} s={HS} facing={1} faceTurn={0.4} look={[0.9, 0.2]} expr="worried" pose={hp} handF="point" uid="h31" />
-					<HeroPlate x={910} s={0.95} dx={140} />
+					<RatingBoard x={1400} y={520} s={0.76} hand={1} f={f} away={away} off={off} />
+					<Actor who="hero" x={810} floor={FL} s={HS} facing={1} faceTurn={0.4} look={[0.9, 0.2]} expr="worried" pose={hp} handF="point" uid="h31" />
+					<HeroPlate x={810} s={0.95} dx={140} />
 				</Svg>
 			</Layer>
 		</Stage>
@@ -316,9 +318,9 @@ const S34: React.FC = () => {
 	const k = sp01(f, at('040') + 6, 44);
 	const wave = Math.sin(f / 5);
 	const rp: Pose = {...idle(gf, 4), armF: [150 + wave * 22, 20], legB: [88, 85], legF: [92, 90], lean: -4};
-	const cam0 = pickCam(sp, {IRMA: camOn(1220, 520, 1.1)}, camOn(900, 540, 1.0));
+	const cam0 = pickCam(sp, {IRMA: camOn(1220, 520, 1.1)}, camOn(960, 520, 1.0));
 	return (
-		<Stage cam={slowPush(f, 190, cam0, 1.04)} bg="#9fd0ff" light={{x: 70, y: 6, o: 0.3}}>
+		<Stage cam={slowPush(f, 190, cam0, 1.18)} bg="#9fd0ff" light={{x: 70, y: 6, o: 0.3}}>
 			<Layer depth={1.5}>
 				<Svg>
 					<Yard />
@@ -328,7 +330,7 @@ const S34: React.FC = () => {
 				<Svg>
 					<Bulldozer x={470} s={1.0} blade={Math.max(0, wave)} />
 					<Actor who="rex" x={470} floor={FL} seat={560} s={1.0} facing={1} faceTurn={0.2} look={[0.7, 0]} mouth="smile" pose={rp} shadow={false} uid="r34" />
-					<KardGrid x={1440} y={470} s={0.74} k={k} />
+					{k > 0.01 ? <KardGrid x={1440} y={470} s={0.74} k={k} /> : null}
 					<Actor who="irma" x={1060} floor={FL} s={IS} facing={1} faceTurn={0.3} look={[0.4, 0.4]} mouth="flat" pose={{...idle(gf, 1), armF: [58, 62]}} uid="i34" />
 				</Svg>
 			</Layer>
@@ -388,6 +390,7 @@ const S37: React.FC = () => {
 			</Layer>
 			<Layer depth={1}>
 				<Svg>
+					<WeighSign x={700} y={250} />
 					<BigScale x={900} s={1.1} text={red > 0.3 ? '+3 КГ' : '0.0'} c={red > 0.3 ? '#ff5a5a' : '#6ff0a0'} id="bs37" />
 					<Actor who="star" x={900} floor={FL - 52 * 1.1} s={1.0} facing={1} faceTurn={0.3} look={[0.6, 0.3]} expr="worried" pose={idle(gf, 2)} uid="st37" shadow={false} />
 					<Extra i={3} x={1640} floor={FL} s={1.15} facing={-1} seed="opp" expr="wide" />
@@ -402,13 +405,13 @@ const S37: React.FC = () => {
 const S38: React.FC = () => {
 	const {f, gf, at} = useShot();
 	const sp = useSpeaking(gf);
-	const cam0 = pickCam(sp, {IRMA: camOn(1050, 520, 1.45), HERO: camOn(1520, 480, 1.4)}, camOn(1000, 540, 1.0));
+	const cam0 = pickCam(sp, {IRMA: camOn(1100, 520, 1.15), HERO: camOn(1330, 500, 1.15)}, camOn(1020, 540, 1.0));
 	const tap = Math.max(env(f, at('044') + 12, at('044') + 24, 3, 3), env(f, at('044') + 34, at('044') + 44, 3, 3));
 	const wr = sp01(f, at('045') + 14, 30);
-	const ip = reach({...idle(gf, 1), lean: 3}, 'F', toLocal(960, 650 - 20 * tap, 1050, FL - 157 * IS, IS, -1), 1);
+	const ip = reach({...idle(gf, 1), lean: 3}, 'F', toLocal(900, 650 - 20 * tap, 980, FL - 157 * IS, IS, -1), 1);
 	const kp = reach({...idle(gf, 3), lean: 6}, 'B', [40, -10], env(f, at('045') + 4, at('045') + 60, 6, 6));
 	return (
-		<Stage cam={slowPush(f, 210, cam0)} bg="#090b1d" light={{night: true, o: 0.25}}>
+		<Stage cam={slowPush(f, 210, cam0, 1.05)} bg="#090b1d" light={{night: true, o: 0.25}}>
 			<Layer depth={1.4}>
 				<Svg>
 					<CageSide f={gf} />
@@ -416,13 +419,13 @@ const S38: React.FC = () => {
 			</Layer>
 			<Layer depth={1}>
 				<Svg>
-					<Actor who="star" x={620} floor={FL} s={1.05} facing={1} faceTurn={0.3} look={[0.3, 0.6]} expr="sleepy" mouth="open" pose={{...idle(gf, 2), lean: 18, head: 14, armF: [20, 70], armB: [14, 70]}} uid="st38" />
-					<Steam x={620} y={560} f={f} />
-					<Actor who="irma" x={1050} floor={FL} s={IS} facing={-1} faceTurn={0.3} look={[-0.5, 0.4]} mouth="flat" pose={ip} handF="point" uid="i38" />
-					<Cap x={900} y={290} t="ЛАГЕРЬ ≠ 10 ДНЕЙ" k={Math.min(sp01(f, at('044') + 6, 12), 1 - sp01(f, at('045') - 6, 8))} size={54} />
+					<Actor who="star" x={400} floor={FL} s={1.05} facing={1} faceTurn={0.3} look={[0.3, 0.6]} expr="sleepy" mouth="open" pose={{...idle(gf, 2), lean: 18, head: 14, armF: [20, 70], armB: [14, 70]}} uid="st38" />
+					<Steam x={400} y={560} f={f} />
+					<Actor who="irma" x={980} floor={FL} s={IS} facing={-1} faceTurn={0.3} look={[-0.5, 0.4]} mouth="flat" pose={ip} handF="point" uid="i38" />
+					<Cap x={820} y={290} t="ЛАГЕРЬ ≠ 10 ДНЕЙ" k={Math.min(sp01(f, at('044') + 6, 12), 1 - sp01(f, at('045') - 6, 8))} size={54} />
 					<Actor who="hero" x={1520} floor={FL} s={HS} facing={-1} faceTurn={0.4} look={[-0.6, 0.5]} mouth="line" pose={kp} uid="h38" />
 					<HeroPlate x={1520} s={0.95} />
-					{wr > 0 ? <Cap x={1290} y={560} t="ЛАГЕРЬ" k={wr} size={72} c="#6ff0a0" /> : null}
+					{wr > 0 ? <Cap x={1235} y={640} t="ЛАГЕРЬ" k={wr} size={72} c="#6ff0a0" /> : null}
 				</Svg>
 			</Layer>
 		</Stage>
@@ -468,6 +471,7 @@ const S40: React.FC = () => {
 			</Layer>
 			<Layer depth={1}>
 				<Svg>
+					<WeighSign x={640} y={250} />
 					<BigScale x={1000} s={1.1} text="0.0" c="#6ff0a0" id="bs40a" />
 					<BigScale x={1380} s={1.1} text="0.0" c="#6ff0a0" id="bs40b" />
 					<Actor who="senya" x={w.x} floor={FL} s={1.2} facing={1} faceTurn={0.5} look={[0.8, 0]} outfit="hoodie" pose={w.pose} vx={w.vx} bob={w.bob} uid="s40" />
@@ -495,6 +499,7 @@ const S41: React.FC = () => {
 			</Layer>
 			<Layer depth={1}>
 				<Svg>
+					<WeighSign x={640} y={250} />
 					<BigScale x={1100} s={1.1} text={up > 0.5 ? 'ЛИМИТ' : '0.0'} c="#6ff0a0" id="bs41" />
 					<Actor who="senya" x={940 + 160 * up} floor={FL - 52 * 1.1 * up} s={1.2} facing={1} faceTurn={0.5} look={[0.6, 0.4]} outfit={jacket ? 'hoodie' : 'tee'} pose={idle(gf, 5)} uid="s41" shadow={false} />
 					<Actor who="irma" x={1720} floor={FL} s={IS} facing={-1} faceTurn={0.2} look={sp === 'IRMA' ? [-0.8, 0.1] : [-0.2, 0.6]} mouth="flat" pose={ip} uid="i41" />
@@ -521,12 +526,13 @@ const S42: React.FC = () => {
 			</Layer>
 			<Layer depth={1}>
 				<Svg>
+					<WeighSign x={560} y={250} />
 					<BigScale x={760} s={1.15} text={ok > 0.5 ? 'ЛИМИТ ✓' : '0.0'} c="#6ff0a0" id="bs42a" />
 					<BigScale x={1340} s={1.15} text={ok > 0.5 ? 'ЛИМИТ ✓' : '0.0'} c="#6ff0a0" id="bs42b" />
 					<Actor who="senya" x={760} floor={FL - 52 * 1.15} s={1.2} facing={1} faceTurn={0.5} look={[0.6, 0.5]} pose={sp} uid="s42" shadow={false} />
 					<Actor who="tayo" x={1340} floor={FL - 52 * 1.15} s={1.2} facing={-1} faceTurn={0.5} look={[-0.6, 0.3]} pose={idle(gf, 6)} uid="t42" shadow={false} />
 					{bub > 0 && f < at('050') + 225 ? (
-						<Bubble x={1340} y={300} w={420} h={140} t={bub} tail={[0, 140]}>
+						<Bubble x={1360} y={262} w={420} h={140} t={bub} tail={[-20, 110]}>
 							<text x={0} y={24} textAnchor="middle" fontSize={72} fontFamily={FONT} fontWeight={900} fill="#14501f">
 								ВЕС ✓
 							</text>
