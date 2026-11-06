@@ -57,15 +57,37 @@ export const probe = (frame: number) => {
 		let covered = 0;
 		let by = '';
 		let byBox = '';
+		let under = 0;
+		let underBy = '';
+		let underBox = '';
 		for (let i = 0; i < 12; i++) {
-			for (let j = 0; j < 3; j++) {
+			for (let j = 0; j < 24; j++) {
 				const x = r.left + (r.width * (i + 0.5)) / 12;
-				const y = r.top + (r.height * (j + 1.2)) / 4.4;
+				const y = r.top + (r.height * (j + 0.5)) / 24;
 				if (x < 0 || y < 0 || x > W || y > H) continue;
 				const stack = document.elementsFromPoint(x, y);
 				const idx = stack.findIndex((e) => e === el || el.contains(e));
 				if (idx < 0) continue;
 				hits++;
+				// what lies right UNDER the text (shelf item, cage rail, prop): letters must not melt into it
+				for (let k = idx + 1; k < stack.length; k++) {
+					const e = stack[k];
+					const tag = e.tagName.toLowerCase();
+					if (!PAINT.has(tag) || e.contains(el) || el.contains(e) ) continue;
+					if (effOpacity(e) < 0.6) continue;
+					const cs = getComputedStyle(e);
+					const thick = parseFloat(cs.strokeWidth || '0') >= 6;
+					if (cs.fill === 'none' && !(thick && cs.stroke !== 'none')) continue;
+					if (tag === 'line' && !thick) continue;
+					const q = e.getBoundingClientRect();
+					if (q.width * q.height < 3000) continue; // a glint / phone light / dot is not an object
+					if (q.width * q.height > W * H * 0.4) continue; // wall, floor, sky: a backdrop is fine
+					if (q.left <= r.left + 2 && q.right >= r.right - 2 && q.top <= r.top + 2 && q.bottom >= r.bottom - 2) break; // the text lies wholly on this plate / sheet / bubble
+					under++;
+					underBy = e.closest('[data-actor]')?.getAttribute('data-actor') ?? tag;
+					underBox = '[' + box(q).join(',') + ']';
+					break; // only the topmost painted thing under this point counts
+				}
 				for (let k = 0; k < idx; k++) {
 					const e = stack[k];
 					if (!PAINT.has(e.tagName.toLowerCase()) || e.contains(el) || el.contains(e)) continue;
@@ -81,8 +103,10 @@ export const probe = (frame: number) => {
 			}
 		}
 		if (hits >= 3 && covered >= 1) issues.push({kind: 'covered', what: 'text «' + t.slice(0, 40) + '»', box: box(r), by: by + (byBox ? ' ' + byBox : '')});
+		// (reported below, after we know whether the text sits on its own plate)
 		// overflow: the text sticks out of the plate / stamp / paper it is written on
 		let best: DOMRect | null = null;
+		let bestEl: Element | null = null;
 		let node: Element | null = el;
 		for (let up = 0; up < 3 && node; up++, node = node.parentElement) {
 			node.parentElement?.querySelectorAll(':scope > rect').forEach((rc) => {
@@ -91,11 +115,16 @@ export const probe = (frame: number) => {
 				const cx = r.left + r.width / 2;
 				const cy = r.top + r.height / 2;
 				if (cx < q.left || cx > q.right || cy < q.top || cy > q.bottom) return;
-				if (!best || q.width * q.height < best.width * best.height) best = q;
+				if (!best || q.width * q.height < best.width * best.height) {
+					best = q;
+					bestEl = rc;
+				}
 			});
 			if (best) break;
 		}
 		const b = best as DOMRect | null;
+		const solid = !!bestEl && getComputedStyle(bestEl as Element).fill !== 'none' && effOpacity(bestEl) >= 0.6; // an outline-only stamp is not a plate
+		if (!solid && hits >= 3 && under >= 2) issues.push({kind: 'under', what: 'text «' + t.slice(0, 40) + '»', box: box(r), by: underBy + ' ' + underBox});
 		const m = (el as unknown as SVGGraphicsElement).getScreenCTM?.();
 		const rotated = !!m && (Math.abs(m.b) > 0.2 || Math.abs(m.c) > 0.2); // the box of a rotated text is bigger than the text itself
 		if (b && !rotated && (r.left < b.left - 4 || r.right > b.right + 4)) issues.push({kind: 'overflow', what: 'text «' + t.slice(0, 40) + '»', box: box(r), side: 'plate ' + box(b).join(',')});
@@ -118,6 +147,29 @@ export const probe = (frame: number) => {
 		// a close-up may crop legs / chairs at the bottom; the head side (left, right, top) must not be cut
 		const sideCut = r.left < -2 || r.right > W + 2 || r.top < -2;
 		if (sideCut && frac > 0.03 && frac < 0.6) issues.push({kind: 'actor-cut', what: e.getAttribute('data-actor') ?? 'actor', box: box(r)});
+		// a plate / board / panel lying over the actor's upper body (face, hair, lamp)
+		let hid = 0;
+		let hidBy = '';
+		for (let i = 0; i < 8; i++) {
+			for (let j = 0; j < 8; j++) {
+				const x = r.left + (r.width * (i + 0.5)) / 8;
+				const y = r.top + (r.height * 0.4 * (j + 0.5)) / 8;
+				if (x < 0 || y < 0 || x > W || y > H) continue;
+				const stack = document.elementsFromPoint(x, y);
+				const idx = stack.findIndex((n) => e.contains(n));
+				if (idx <= 0) continue;
+				for (let k = 0; k < idx; k++) {
+					const n = stack[k];
+					if (n.tagName.toLowerCase() === 'rect' && PANEL_FILLS.has(getComputedStyle(n).fill) && effOpacity(n) >= 0.6) {
+						hid++;
+						const q = n.getBoundingClientRect();
+						hidBy = '[' + box(q).join(',') + ']';
+						break;
+					}
+				}
+			}
+		}
+		if (hid >= 3) issues.push({kind: 'panel-over-actor', what: e.getAttribute('data-actor') ?? 'actor', box: box(r), by: 'panel ' + hidBy});
 	});
 	return {frame, issues};
 };

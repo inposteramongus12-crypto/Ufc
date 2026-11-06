@@ -197,8 +197,8 @@ const T87: React.FC = () => {
 			</Layer>
 			<Layer depth={1}>
 				<Svg>
-					<RatingBoard x={960} y={520} s={0.95} hand={sp(f, at('087') + 10, 60)} f={f} />
-					<rect x={-300 + 960 - 560 * 0.95} y={520 + 120 * 0.95} width={1120 * 0.95} height={150 * 0.95} rx={20} fill="none" stroke="#ffe08a" strokeWidth={8} opacity={0.4 + 0.5 * glow} />
+					<RatingBoard x={960} y={520} s={0.95} hand={sp(f, at('087') + 2, 20)} f={f} />
+					<rect x={960 - 585 * 0.95} y={520 + 110 * 0.95} width={1170 * 0.95} height={170 * 0.95} rx={20} fill="none" stroke="#ffe08a" strokeWidth={8} opacity={0.4 + 0.5 * glow} />
 				</Svg>
 			</Layer>
 			{dim(0.18)}
@@ -277,8 +277,8 @@ const T91: React.FC = () => {
 						<HeroPlate x={620} y={845 - 214 * HS - 84} s={0.95} dx={-20} />
 					</g>
 					{bl ? (
-						<SafeBox x={620} y={190} left={300} right={300} top={80} bottom={80}>
-							<g transform="translate(620,190)">
+						<SafeBox x={1090} y={330} left={300} right={300} top={80} bottom={80}>
+							<g transform="translate(1090,330)">
 								<rect x={-280} y={-64} width={560} height={110} rx={30} fill="#d9372b" stroke="#fff" strokeWidth={5} />
 								<text x={0} y={22} textAnchor="middle" fontSize={68} fontFamily={FONT} fontWeight={900} fill="#fff">
 									ПРОДЛЕНИЕ?
@@ -406,7 +406,7 @@ const T100: React.FC = () => {
 					<Actor who="hero" x={450} floor={FL} s={HS} facing={1} faceTurn={0.4} look={[0.9, 0]} mouth="smile" pose={idle(gf, 3)} uid="h100" />
 					<HeroPlate x={450} s={0.95} dx={-50} />
 					{bub > 0 ? (
-						<Bubble x={1240} y={320} w={420} h={130} t={bub} tail={[0, 100]}>
+						<Bubble x={1240} y={240} w={420} h={130} t={bub} tail={[0, 100]}>
 							<text x={0} y={24} textAnchor="middle" fontSize={72} fontFamily={FONT} fontWeight={900} fill="#14501f">
 								ВЕС ✓
 							</text>

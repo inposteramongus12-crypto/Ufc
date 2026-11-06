@@ -68,7 +68,7 @@ const S53: React.FC = () => {
 					<HeroPlate x={620} y={headTop(HS) + 100 - 84} s={0.95} dx={30} />
 					<Actor who="rex" x={w.x} floor={FL} s={1.15} facing={w.facing} faceTurn={0.4} look={[-0.8, 0]} mouth="flat" pose={rp} vx={w.vx} bob={w.bob} uid="r53" />
 					{slap > 0 ? <OtherContract x={900} y={540} s={0.62} rot={-6} /> : null}
-					<Stamp x={1260} y={300} text="ЛИГА ВЫМЫШЛЕННАЯ" k={sp(f, t0 + 150, 8)} rot={-5} c="#2f6fd8" size={56} />
+					<Stamp x={1260} y={300} text="ЛИГА ВЫМЫШЛЕННАЯ" k={sp(f, t0 + 150, 8)} rot={-5} c="#2f6fd8" size={56} bg="#fbf8ef" />
 				</Svg>
 			</Layer>
 		</Stage>
@@ -295,7 +295,7 @@ const S63: React.FC = () => {
 				<Svg>
 					{[0, 1, 2].map((i) => (
 						<g key={i} opacity={Math.min(sp(l, i * 14, 10), interpolate(f, [dur - 10, dur - 4], [1, 0], clamp))}>
-							<Billboard x={960 + (i - 1) * 500} y={470} s={0.55 + 0.1 * sp(l, i * 14, 10)} />
+							<Billboard x={960 + (i - 1) * 500} y={520} s={0.55 + 0.1 * sp(l, i * 14, 10)} />
 						</g>
 					))}
 					<HUD />
@@ -329,7 +329,7 @@ const S64: React.FC = () => {
 					<Actor who="irma" x={1120} floor={FL} s={IS} facing={-1} faceTurn={0.3} look={[-0.2, 0.6]} mouth="flat" pose={{...idle(gf, 1), armF: [-60, 80]}} uid="i64" />
 					<Wallet x={1200} y={640 - 10 * flip} flip={flip} />
 					{coin > 0 ? <Coin x={1200 - 40 * coin} y={660 + 230 * coin * coin} spin={coin} /> : null}
-					<UnderCard x={1380} y={400} s={0.5} k={0} />
+					<UnderCard x={1440} y={400} s={0.42} k={0} />
 				</Svg>
 			</Layer>
 		</Stage>
@@ -459,7 +459,7 @@ const S70: React.FC = () => {
 	const down = sp(f, land + 2, 10);
 	const crack = sp(f, land + 4, 12);
 	const shake = f > land && f < land + 14 ? 7 : 0;
-	const cam = f < land ? push(f, land, camOn(1000, 520, 1.0), camOn(1150, 620, 1.15)) : push(f - land, 170, camOn(1200, 700, 1.2), camOn(1220, 710, 1.28));
+	const cam = f < land ? push(f, land, camOn(1000, 520, 1.0), camOn(1150, 620, 1.15)) : push(f - land, 170, camOn(1200, 590, 1.08), camOn(1220, 590, 1.12));
 	const spin = f < land ? jumpK * 340 : 0;
 	const rp: Pose = f < land ? {...idle(gf, 4), armF: [150, 20], armB: [-150, 20], legB: [20, 60], legF: [30, 70], lean: 8} : {...idle(0, 4), legF: [-30, -50], legB: [10, 40], lean: 6 * down, armF: [40, 60], armB: [20, 60]};
 	return (

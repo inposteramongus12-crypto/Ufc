@@ -356,10 +356,10 @@ export const Envelope: React.FC<{x: number; y: number; s?: number; open: number;
 	</g>
 );
 
-export const Stamp: React.FC<{x: number; y: number; text: string; k: number; rot?: number; c?: string; size?: number}> = ({x, y, text, k, rot = -8, c = '#d9372b', size = 50}) =>
+export const Stamp: React.FC<{x: number; y: number; text: string; k: number; rot?: number; c?: string; size?: number; bg?: string}> = ({x, y, text, k, rot = -8, c = '#d9372b', size = 50, bg = 'none'}) =>
 	k <= 0 ? null : (
 		<g transform={`translate(${x},${y}) rotate(${rot}) scale(${1 + (1 - Math.min(1, k * 4)) * 1.4})`} opacity={Math.min(1, k * 3)}>
-			<rect x={-text.length * size * 0.43 - 28} y={-size * 0.76} width={text.length * size * 0.86 + 56} height={size * 1.52} rx={10} fill="none" stroke={c} strokeWidth={7} />
+			<rect x={-text.length * size * 0.43 - 28} y={-size * 0.76} width={text.length * size * 0.86 + 56} height={size * 1.52} rx={10} fill={bg} stroke={c} strokeWidth={7} />
 			<text x={0} y={size * 0.32} textAnchor="middle" fontSize={size} fontFamily={FONT} fontWeight={900} fill={c} letterSpacing={3}>
 				{text}
 			</text>

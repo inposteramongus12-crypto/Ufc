@@ -146,7 +146,7 @@ const U105: React.FC = () => {
 	const t7 = at('107') - at('105');
 	const gripK = env(f, 4, 190, 8, 8);
 	const kp = reach({...idle(gf, 3), lean: 8}, 'F', toLocal(560, 560, 300, FL - 157 * 1.3, 1.3, 1), gripK);
-	const cam0 = pick(sp0, {HERO: camOn(520, 520, 1.25), IRMA: camOn(700, 520, 1.25)}, camOn(1000, 540, 1.0));
+	const cam0 = pick(sp0, {HERO: camOn(660, 520, 1.2), IRMA: camOn(700, 520, 1.25)}, camOn(1000, 540, 1.0));
 	return (
 		<Stage cam={slow(f, 195, cam0, 1.06)} bg="#090b1d" light={{night: true, o: 0.25}}>
 			<Arena gf={gf} up={sp0 === 'N' ? 0.9 : 0.6} />
@@ -320,8 +320,8 @@ const U114: React.FC = () => {
 			<Layer depth={1}>
 				<Svg>
 					<Duel f={f} gf={gf} sx={880} tx={1240} hands />
-					<Chant x={960} y={300} t="СЕ-НЯ!" k={sp(f, at('114') + 40, 10)} size={160} />
-					<Chant x={960} y={450} t="СЕ-НЯ!" k={sp(f, at('114') + 70, 10)} size={110} rot={3} />
+					<Chant x={470} y={450} t="СЕ-НЯ!" k={sp(f, at('114') + 40, 10)} size={110} />
+					<Chant x={1520} y={470} t="СЕ-НЯ!" k={sp(f, at('114') + 70, 10)} size={110} rot={3} />
 				</Svg>
 			</Layer>
 		</Stage>
@@ -426,8 +426,8 @@ const U121: React.FC = () => {
 			<Arena gf={gf} up={1} />
 			<Layer depth={1}>
 				<Svg>
-					<Chant x={660} y={330} t="СЕ-НЯ!" k={sp(f, at('121') + 12, 8)} size={130} rot={-6} />
-					<Chant x={1260} y={330} t="СЕ-НЯ!" k={sp(f, at('121') + 44, 8)} size={130} rot={5} />
+					<Chant x={660} y={470} t="СЕ-НЯ!" k={sp(f, at('121') + 12, 8)} size={130} rot={-6} />
+					<Chant x={1260} y={470} t="СЕ-НЯ!" k={sp(f, at('121') + 44, 8)} size={130} rot={5} />
 				</Svg>
 			</Layer>
 		</Stage>
@@ -457,7 +457,7 @@ const U123: React.FC = () => {
 const U124: React.FC = () => {
 	const {f, gf, at} = useShot();
 	const cam = push(f, 112, camOn(900, 540, 1.0), camOn(960, 520, 1.15));
-	const bub = f - (at('124') + 50);
+	const bub = f - (at('124') + 14);
 	const buzz = Math.sin(f * 2.8) * 6 * (f > at('124') + 6 ? 1 : 0);
 	return (
 		<Stage cam={cam} bg="#090b1d" light={{night: true, o: 0.25}}>

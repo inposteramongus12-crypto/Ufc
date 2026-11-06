@@ -424,7 +424,7 @@ const S38: React.FC = () => {
 					<Actor who="star" x={400} floor={FL} s={1.05} facing={1} faceTurn={0.3} look={[0.3, 0.6]} expr="sleepy" mouth="open" pose={{...idle(gf, 2), lean: 18, head: 14, armF: [20, 70], armB: [14, 70]}} uid="st38" />
 					<Steam x={400} y={560} f={f} />
 					<Actor who="irma" x={980} floor={FL} s={IS} facing={-1} faceTurn={0.3} look={[-0.5, 0.4]} mouth="flat" pose={ip} handF="point" uid="i38" />
-					<Cap x={820} y={290} t="ЛАГЕРЬ ≠ 10 ДНЕЙ" k={Math.min(sp01(f, at('044') + 6, 12), 1 - sp01(f, at('045') - 6, 8))} size={54} />
+					<Cap x={820} y={365} t="ЛАГЕРЬ ≠ 10 ДНЕЙ" k={Math.min(sp01(f, at('044') + 6, 12), 1 - sp01(f, at('045') - 6, 8))} size={54} />
 					<Actor who="hero" x={1520} floor={FL} s={HS} facing={-1} faceTurn={0.4} look={[-0.6, 0.5]} mouth="line" pose={kp} uid="h38" />
 					<HeroPlate x={1520} s={0.95} />
 					{wr > 0 ? <Cap x={1235} y={640} t="ЛАГЕРЬ" k={wr} size={72} c="#6ff0a0" /> : null}
@@ -529,12 +529,12 @@ const S42: React.FC = () => {
 			<Layer depth={1}>
 				<Svg>
 					<WeighSign x={500} y={250} />
-					<BigScale x={700} s={1.0} text={ok > 0.5 ? 'ЛИМИТ ✓' : '0.0'} c="#6ff0a0" id="bs42a" />
-					<BigScale x={1290} s={1.0} text={ok > 0.5 ? 'ЛИМИТ ✓' : '0.0'} c="#6ff0a0" id="bs42b" />
-					<Actor who="senya" x={700} floor={FL - 52 * 1.0} s={1.2} facing={1} faceTurn={0.5} look={[0.6, 0.5]} pose={sp} uid="s42" shadow={false} />
-					<Actor who="tayo" x={1290} floor={FL - 52 * 1.0} s={1.2} facing={-1} faceTurn={0.5} look={[-0.6, 0.3]} pose={idle(gf, 6)} uid="t42" shadow={false} />
+					<BigScale x={640} s={1.0} text={ok > 0.5 ? 'ЛИМИТ ✓' : '0.0'} c="#6ff0a0" id="bs42a" />
+					<BigScale x={1250} s={1.0} text={ok > 0.5 ? 'ЛИМИТ ✓' : '0.0'} c="#6ff0a0" id="bs42b" />
+					<Actor who="senya" x={570} floor={FL - 52 * 1.0} s={1.2} facing={1} faceTurn={0.5} look={[0.6, 0.5]} pose={sp} uid="s42" shadow={false} />
+					<Actor who="tayo" x={1250} floor={FL - 52 * 1.0} s={1.2} facing={-1} faceTurn={0.5} look={[-0.6, 0.3]} pose={idle(gf, 6)} uid="t42" shadow={false} />
 					{bub > 0 && f < at('050') + 225 ? (
-						<Bubble x={1460} y={262} w={420} h={140} t={bub} tail={[-170, 110]}>
+						<Bubble x={1420} y={262} w={420} h={140} t={bub} tail={[-170, 110]}>
 							<text x={0} y={24} textAnchor="middle" fontSize={72} fontFamily={FONT} fontWeight={900} fill="#14501f">
 								ВЕС ✓
 							</text>
