@@ -1,0 +1,483 @@
+{
+ "_comment": "Шортс: подложка по short-timeline.json (номера реплик шортса 001–014). Музыки нет. Вжухи на стыках планов и щелчки счётчика расставлены вручную (автоматических cues у шортса нет). Паузы: 121→125 0,5 с, финальная карточка 3 с.",
+ "ambience": [
+  {
+   "from": "001",
+   "to": "003",
+   "kind": "crowd",
+   "gain": 0.06
+  },
+  {
+   "from": "003",
+   "to": "007",
+   "kind": "room",
+   "gain": 0.05
+  },
+  {
+   "from": "007",
+   "to": "009",
+   "kind": "night",
+   "gain": 0.045
+  },
+  {
+   "from": "009",
+   "to": "012",
+   "kind": "room",
+   "gain": 0.05
+  },
+  {
+   "from": "012",
+   "to": "013",
+   "kind": "crowd",
+   "gain": 0.08
+  },
+  {
+   "from": "013",
+   "to": "end",
+   "kind": "crowd",
+   "gain": 0.035
+  }
+ ],
+ "music": [],
+ "sfx": [
+  {
+   "at": "001",
+   "off": 0,
+   "type": "buzz",
+   "dur": 7,
+   "amp": 0.01
+  },
+  {
+   "at": "001",
+   "off": 8,
+   "type": "switch"
+  },
+  {
+   "at": "002",
+   "off": -4,
+   "type": "ding",
+   "amp": 0.1
+  },
+  {
+   "at": "003",
+   "off": -11,
+   "type": "whoosh",
+   "dur": 0.8,
+   "amp": 0.12
+  },
+  {
+   "at": "005",
+   "off": -11,
+   "type": "whoosh",
+   "dur": 0.8,
+   "amp": 0.12
+  },
+  {
+   "at": "007",
+   "off": -11,
+   "type": "whoosh",
+   "dur": 0.8,
+   "amp": 0.12
+  },
+  {
+   "at": "008",
+   "off": -11,
+   "type": "whoosh",
+   "dur": 0.8,
+   "amp": 0.12
+  },
+  {
+   "at": "009",
+   "off": -11,
+   "type": "whoosh",
+   "dur": 0.8,
+   "amp": 0.12
+  },
+  {
+   "at": "012",
+   "off": -11,
+   "type": "whoosh",
+   "dur": 0.8,
+   "amp": 0.12
+  },
+  {
+   "at": "013",
+   "off": -11,
+   "type": "whoosh",
+   "dur": 0.8,
+   "amp": 0.12
+  },
+  {
+   "at": "003",
+   "off": 12,
+   "type": "click",
+   "amp": 0.3
+  },
+  {
+   "at": "003",
+   "off": 12,
+   "type": "click",
+   "amp": 0.1
+  },
+  {
+   "at": "003",
+   "off": 15,
+   "type": "click",
+   "amp": 0.1
+  },
+  {
+   "at": "003",
+   "off": 19,
+   "type": "click",
+   "amp": 0.1
+  },
+  {
+   "at": "003",
+   "off": 22,
+   "type": "click",
+   "amp": 0.1
+  },
+  {
+   "at": "003",
+   "off": 25,
+   "type": "click",
+   "amp": 0.1
+  },
+  {
+   "at": "003",
+   "off": 28,
+   "type": "click",
+   "amp": 0.1
+  },
+  {
+   "at": "003",
+   "off": 32,
+   "type": "click",
+   "amp": 0.1
+  },
+  {
+   "at": "003",
+   "off": 35,
+   "type": "click",
+   "amp": 0.1
+  },
+  {
+   "at": "003",
+   "off": 38,
+   "type": "click",
+   "amp": 0.1
+  },
+  {
+   "at": "003",
+   "off": 42,
+   "type": "click",
+   "amp": 0.1
+  },
+  {
+   "at": "003",
+   "off": 45,
+   "type": "click",
+   "amp": 0.1
+  },
+  {
+   "at": "003",
+   "off": 48,
+   "type": "click",
+   "amp": 0.1
+  },
+  {
+   "at": "003",
+   "off": 52,
+   "type": "click",
+   "amp": 0.1
+  },
+  {
+   "at": "007",
+   "off": 4,
+   "type": "click",
+   "amp": 0.3
+  },
+  {
+   "at": "007",
+   "off": 4,
+   "type": "click",
+   "amp": 0.1
+  },
+  {
+   "at": "007",
+   "off": 7,
+   "type": "click",
+   "amp": 0.1
+  },
+  {
+   "at": "007",
+   "off": 11,
+   "type": "click",
+   "amp": 0.1
+  },
+  {
+   "at": "007",
+   "off": 14,
+   "type": "click",
+   "amp": 0.1
+  },
+  {
+   "at": "007",
+   "off": 17,
+   "type": "click",
+   "amp": 0.1
+  },
+  {
+   "at": "007",
+   "off": 20,
+   "type": "click",
+   "amp": 0.1
+  },
+  {
+   "at": "007",
+   "off": 24,
+   "type": "click",
+   "amp": 0.1
+  },
+  {
+   "at": "007",
+   "off": 27,
+   "type": "click",
+   "amp": 0.1
+  },
+  {
+   "at": "007",
+   "off": 30,
+   "type": "click",
+   "amp": 0.1
+  },
+  {
+   "at": "007",
+   "off": 34,
+   "type": "click",
+   "amp": 0.1
+  },
+  {
+   "at": "007",
+   "off": 37,
+   "type": "click",
+   "amp": 0.1
+  },
+  {
+   "at": "007",
+   "off": 40,
+   "type": "click",
+   "amp": 0.1
+  },
+  {
+   "at": "008",
+   "off": 4,
+   "type": "click",
+   "amp": 0.3
+  },
+  {
+   "at": "012",
+   "off": 4,
+   "type": "click",
+   "amp": 0.3
+  },
+  {
+   "at": "012",
+   "off": 4,
+   "type": "click",
+   "amp": 0.1
+  },
+  {
+   "at": "012",
+   "off": 7,
+   "type": "click",
+   "amp": 0.1
+  },
+  {
+   "at": "012",
+   "off": 11,
+   "type": "click",
+   "amp": 0.1
+  },
+  {
+   "at": "012",
+   "off": 14,
+   "type": "click",
+   "amp": 0.1
+  },
+  {
+   "at": "012",
+   "off": 17,
+   "type": "click",
+   "amp": 0.1
+  },
+  {
+   "at": "012",
+   "off": 20,
+   "type": "click",
+   "amp": 0.1
+  },
+  {
+   "at": "012",
+   "off": 24,
+   "type": "click",
+   "amp": 0.1
+  },
+  {
+   "at": "012",
+   "off": 27,
+   "type": "click",
+   "amp": 0.1
+  },
+  {
+   "at": "012",
+   "off": 30,
+   "type": "click",
+   "amp": 0.1
+  },
+  {
+   "at": "012",
+   "off": 34,
+   "type": "click",
+   "amp": 0.1
+  },
+  {
+   "at": "003",
+   "off": 10,
+   "type": "whooshUp",
+   "dur": 1.3,
+   "amp": 0.2
+  },
+  {
+   "at": "003",
+   "off": 12,
+   "type": "whoosh",
+   "dur": 1.2,
+   "amp": 0.14
+  },
+  {
+   "at": "007",
+   "off": 2,
+   "type": "whoosh",
+   "dur": 1.2,
+   "amp": 0.16
+  },
+  {
+   "at": "003",
+   "off": 50,
+   "type": "swoosh",
+   "amp": 0.12
+  },
+  {
+   "at": "003",
+   "off": 84,
+   "type": "click",
+   "amp": 0.25
+  },
+  {
+   "at": "005",
+   "off": 6,
+   "type": "pop"
+  },
+  {
+   "at": "006",
+   "off": 26,
+   "type": "thud",
+   "amp": 0.25
+  },
+  {
+   "at": "006",
+   "off": 28,
+   "type": "click",
+   "amp": 0.3
+  },
+  {
+   "at": "007",
+   "off": 40,
+   "type": "thud",
+   "amp": 0.2
+  },
+  {
+   "at": "008",
+   "off": 10,
+   "type": "pop"
+  },
+  {
+   "at": "009",
+   "off": 2,
+   "type": "pop"
+  },
+  {
+   "at": "009",
+   "off": 14,
+   "type": "pop"
+  },
+  {
+   "at": "011",
+   "off": 6,
+   "type": "click",
+   "amp": 0.2
+  },
+  {
+   "at": "011",
+   "off": 30,
+   "type": "sent",
+   "amp": 0.12
+  },
+  {
+   "at": "011",
+   "off": 30,
+   "type": "click",
+   "amp": 0.2
+  },
+  {
+   "at": "012",
+   "off": 10,
+   "type": "stamp",
+   "amp": 0.22
+  },
+  {
+   "at": "012",
+   "off": 44,
+   "type": "stamp",
+   "amp": 0.22
+  },
+  {
+   "at": "013",
+   "off": 4,
+   "type": "buzz",
+   "dur": 0.5,
+   "amp": 0.03
+  },
+  {
+   "at": "013",
+   "off": 30,
+   "type": "buzz",
+   "dur": 0.5,
+   "amp": 0.03
+  },
+  {
+   "at": "013",
+   "off": 8,
+   "type": "pop"
+  },
+  {
+   "at": "014",
+   "off": 115,
+   "type": "switch"
+  },
+  {
+   "at": "014",
+   "off": 122,
+   "type": "whoosh",
+   "dur": 0.8,
+   "amp": 0.12
+  },
+  {
+   "at": "014",
+   "off": 133,
+   "type": "ding",
+   "amp": 0.12
+  }
+ ]
+}

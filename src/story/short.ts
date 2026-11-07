@@ -1,6 +1,6 @@
 import type React from 'react';
 
-// заглушка: 9:16-раскладка шортса заполняется вместе со сценарием
+// шортс: см. short-pick.json (выбор реплик), shortV.tsx (сцены), short-sound.json (звук)
 export type Seg = {
 	line: string;
 	at?: number;
@@ -16,6 +16,8 @@ export type Seg = {
 };
 
 export const SHORT: {mode: 'crop'; hook?: string[]; bed?: string} | {mode: 'recut'; segs: Seg[]; hook?: string[]; bed?: string} = {
-	mode: 'crop',
+	// recut: озвучка лонга, вертикальные сцены нарисованы в shortV.tsx (Short.tsx их не режет из 16:9)
+	mode: 'recut',
+	segs: [],
 	bed: 'sfx/bed_short.wav',
 };
