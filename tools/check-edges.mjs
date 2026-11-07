@@ -28,8 +28,7 @@ const whips = (() => {
 			const T = JSON.parse(fs.readFileSync(path.join(ROOT, 'src/story/short-timeline.json'), 'utf8'));
 			const P = JSON.parse(fs.readFileSync(path.join(ROOT, 'src/story/short-pick.json'), 'utf8'));
 			const at = (n) => T.lines.find((l) => l.id.startsWith(n)).from;
-			const last = T.lines[T.lines.length - 1];
-			return [...P.cuts.map((c) => at(c) - 5), last.from + last.dur];
+						return [...P.cuts.map((c) => at(c) - 5), at(P.card) - P.cardLead];
 		}
 		return JSON.parse(fs.readFileSync(path.join(ROOT, 'src/story/auto-cues.json'), 'utf8')).whips ?? [];
 	} catch {

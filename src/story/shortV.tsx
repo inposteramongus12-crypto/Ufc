@@ -10,15 +10,19 @@ import {clamp, ease} from '../kit/kit';
 
 /* Vertical 1080×1920 scenes of the short (recut: the voice is the long's, the pictures are drawn for 9:16 — nothing is cropped
    from the 16:9 frame, so no 16:9 scale shows through). Rules that every scene keeps:
-   - plates and text in the upper half (y < 960), the floor fills the lower third (y > 1250), feet at y = 1340;
-   - nothing wider than 880 px and nothing closer than 85 px to the side edges (the slow push is ≤ 3.5 %), so 60 px stays free;
-   - small text is 52 px and up (a third more than the long's 40). */
+   - plates and text in the upper half (y < 960), the floor fills the lower third (y > 1250), feet at y = 1450;
+   - Shorts UI safe zone: nothing important in the top 150 px, the bottom 380 px (y > 1540) and right of x = 960 in the lower half
+     (content starts at y = 190, the slow push is ≤ 3.5 %); the channel pill ends above y = 1450;
+   - nothing wider than 880 px and nothing closer than 85 px to the side edges, so 60 px stays free;
+   - small text is 46 px and up (a third more than the long's 40). */
 export const W = 1080;
 export const H = 1920;
-const FEET = 1340;
-const HSC = 1.2; // heroes: 445 px tall
-const HEAD = FEET - 371 * HSC; // 895
-const PLATE_TIP = HEAD - 34; // the plate stands 34 px over the head: rect 647…835
+const FEET = 1450;
+const HSC = 1.5; // heroes: 557 px tall (+25 % over the first version)
+const HEAD = FEET - 371 * HSC; // 893
+const PS = 1.2; // plate scale (+20 %)
+const PLATE_TIP = HEAD - 38; // 855: the plate rect is 598…810
+const TOP = 190; // first y of the content (Shorts UI covers the top 150 px)
 const NAVY = '#11142c';
 
 /* ------------------------------ timeline of the short ------------------------------ */
@@ -29,8 +33,7 @@ const SL = (n: string) => {
 	return l;
 };
 export const T = (n: string, off = 0) => SL(n).from + off;
-const LAST = LINES[LINES.length - 1];
-export const CARD0 = LAST.from + LAST.dur; // the final card lasts the rest (3 s)
+export const CARD0 = T(PICK.card as string) - (PICK.cardLead as number); // the final card takes over BEFORE the question line starts and holds to the end
 export const SHORT_TOTAL = STL.total as number;
 export const CUT_LEAD = 5;
 export const SHOT_STARTS: number[] = [0, ...(PICK.cuts as string[]).map((c) => T(c) - CUT_LEAD), CARD0];
@@ -78,7 +81,7 @@ const sp01 = (f: number, t: number, len = 12) => interpolate(f, [t, t + len], [0
 
 /* ------------------------------ pieces ------------------------------ */
 /* the day plate over a hero: pops when the number changes; (x, TIP) is the tip of its pointer */
-const VPlate: React.FC<{x: number; tip?: number; s?: number; fade?: number}> = ({x, tip = PLATE_TIP, s = 1, fade = 1}) => {
+const VPlate: React.FC<{x: number; tip?: number; s?: number; fade?: number}> = ({x, tip = PLATE_TIP, s = PS, fade = 1}) => {
 	const {gf} = useShot();
 	const ago = agoOf(gf);
 	const pop = 1 + 0.2 * Math.exp(-Math.max(0, ago) / 4) * (ago >= 0 && ago < 40 ? 1 : 0);
@@ -160,10 +163,11 @@ const ArenaWall: React.FC<{up?: number}> = ({up = 0.7}) => {
 	);
 };
 
-/* a month, two weeks: the red chip is the date of the tournament; pos 0 = the 15th, 7 = the 22nd */
-const MiniCal: React.FC<{y: number; s?: number; pos: number; snap?: number}> = ({y, s = 1, pos, snap = 0}) => {
+/* a month, two weeks: the red chip is the date of the tournament; pos 0 = the 15th, 7 = the 22nd. bare: no title bar (less height) */
+const MiniCal: React.FC<{y: number; s?: number; pos: number; snap?: number; bare?: boolean}> = ({y, s = 1, pos, snap = 0, bare}) => {
 	const cw = 112;
-	const cell = (i: number): [number, number] => [-3 * cw + (i % 7) * cw, 150 + Math.floor(i / 7) * 128];
+	const top = bare ? -100 : 0; // the rows start at 150 under the title bar; without it everything moves up by 100
+	const cell = (i: number): [number, number] => [-3 * cw + (i % 7) * cw, 150 + top + Math.floor(i / 7) * 128];
 	const lo = Math.floor(pos);
 	const k = pos - lo;
 	const [ax, ay] = cell(Math.min(13, lo));
@@ -172,11 +176,15 @@ const MiniCal: React.FC<{y: number; s?: number; pos: number; snap?: number}> = (
 	const py = ay + (by - ay) * k;
 	return (
 		<g transform={`translate(540,${y}) scale(${s})`}>
-			<rect x={-420} y={0} width={840} height={400} rx={22} fill="#fbf8ef" stroke="#0d0d1c" strokeWidth={6} />
-			<rect x={-420} y={0} width={840} height={100} rx={22} fill="#d9372b" />
-			<text x={0} y={72} textAnchor="middle" fontSize={64} fontFamily={FONT} fontWeight={900} fill="#fff">
-				ТУРНИР ГОДА
-			</text>
+			<rect x={-420} y={0} width={840} height={bare ? 300 : 400} rx={22} fill="#fbf8ef" stroke="#0d0d1c" strokeWidth={6} />
+			{bare ? null : (
+				<>
+					<rect x={-420} y={0} width={840} height={100} rx={22} fill="#d9372b" />
+					<text x={0} y={72} textAnchor="middle" fontSize={64} fontFamily={FONT} fontWeight={900} fill="#fff">
+						ТУРНИР ГОДА
+					</text>
+				</>
+			)}
 			{Array.from({length: 14}).map((_, i) => {
 				const [cx, cy] = cell(i);
 				return (
@@ -238,60 +246,76 @@ const octPts = (cx: number, cy: number, rx: number, ry: number) =>
 	});
 const ptsOf = (p: [number, number][]) => p.map((q) => q.join(',')).join(' ');
 const ShotA: React.FC = () => {
-	const {f, gf} = useShot();
+	const {f} = useShot();
 	const cx = 540;
 	const cy = 1200;
 	const outer = octPts(cx, cy, 500, 420);
 	const inner = octPts(cx, cy, 410, 345);
-	const flick = 0.9 + 0.1 * Math.sin(f / 3);
-	const titr = sp01(f, 12, 14) * (1 - sp01(f, T('001') + SL('001').dur - 6 - 0, 10));
+	// the hall flickers: the light bursts and the sweeping beams; the camera drives in on the cage (background only, the panels stay put)
+	const burst = Math.max(0, Math.sin(f / 3.1) * Math.sin(f / 7.3));
+	const flick = 0.85 + 0.15 * Math.sin(f / 3) + 0.2 * burst;
+	const push = 1 + 0.16 * interpolate(f, [0, 300], [0, 1], {...clamp, easing: ease});
+	const sweep1 = 9 * Math.sin(f / 38);
+	const sweep2 = -9 * Math.sin(f / 31 + 1);
+	const titr = sp01(f, 8, 10) * (1 - sp01(f, 96, 10)); // the credit shows for the first 3 seconds only
 	const title = sp01(f, T('002') - 4, 12);
 	return (
 		<g>
-			<rect x={-60} y={-60} width={W + 120} height={H + 120} fill="#070914" />
-			<Crowd seed="vtop" x0={-60} x1={1140} y0={30} y1={300} n={30} f={f} color="#05070f" up={0.9} />
-			<polygon points="450,-60 630,-60 860,1180 220,1180" fill="#ffffff" opacity={0.13 * flick} />
-			<polygon points="500,-60 580,-60 700,1180 380,1180" fill="#ffffff" opacity={0.12 * flick} />
-			<ellipse cx={cx} cy={cy + 10} rx={640} ry={560} fill="#0f1431" />
-			<polygon points={ptsOf(outer)} fill="#1b1f33" />
-			<polygon points={ptsOf(inner)} fill="#d6d9e6" />
-			<polygon points={ptsOf(octPts(cx, cy, 330, 276))} fill="#2a3b78" opacity={0.85} />
-			<ellipse cx={cx} cy={cy} rx={300} ry={230} fill="#ffffff" opacity={0.2 * flick} />
-			<ellipse cx={cx} cy={cy} rx={170} ry={130} fill="none" stroke="#8fa3e8" strokeWidth={10} />
-			{inner.map((p, i) => (
-				<g key={i}>
-					<line x1={p[0]} y1={p[1]} x2={p[0]} y2={p[1] - 130} stroke="#8c94ad" strokeWidth={9} />
-					<line x1={p[0]} y1={p[1] - 130} x2={inner[(i + 1) % 8][0]} y2={inner[(i + 1) % 8][1] - 130} stroke="#8c94ad" strokeWidth={6} opacity={0.8} />
-					<line x1={p[0]} y1={p[1]} x2={inner[(i + 1) % 8][0]} y2={inner[(i + 1) % 8][1]} stroke="#e7e9f2" strokeWidth={10} />
+			<g transform={`translate(540,1000) scale(${push}) translate(-540,-1000)`}>
+				<rect x={-200} y={-200} width={W + 400} height={H + 400} fill="#070914" />
+				<Crowd seed="vtop" x0={-60} x1={1140} y0={30} y1={330} n={40} f={f * 1.4} color="#05070f" up={1} />
+				<g transform="rotate(0 540 -60)">
+					<polygon points="450,-60 630,-60 860,1180 220,1180" fill="#ffffff" opacity={0.12 * flick} />
 				</g>
-			))}
-			<Crowd seed="vbot" x0={-60} x1={1140} y0={1700} y1={1900} n={20} f={f} color="#02030a" up={1} />
-			{Array.from({length: 26}).map((_, i) => (
-				<circle key={i} cx={random('vd' + i) * W + Math.sin(f / 40 + i) * 20} cy={(random('ve' + i) * H + f * (0.4 + random('vf' + i) * 0.6)) % H} r={1.5 + random('vg' + i) * 2.6} fill="#aebcff" opacity={0.45} />
-			))}
-			{/* the credit over line 001: small, a third bigger than usual */}
+				<g transform={`rotate(${sweep1} 240 -60)`}>
+					<polygon points="170,-60 310,-60 560,1250 20,1250" fill="#9fb4ff" opacity={0.1 + 0.08 * burst} />
+				</g>
+				<g transform={`rotate(${sweep2} 840 -60)`}>
+					<polygon points="770,-60 910,-60 1060,1250 520,1250" fill="#ffd6a0" opacity={0.08 + 0.08 * (1 - burst)} />
+				</g>
+				<ellipse cx={cx} cy={cy + 10} rx={640} ry={560} fill="#0f1431" />
+				<polygon points={ptsOf(outer)} fill="#1b1f33" />
+				<polygon points={ptsOf(inner)} fill="#d6d9e6" />
+				<polygon points={ptsOf(octPts(cx, cy, 330, 276))} fill="#2a3b78" opacity={0.85} />
+				<ellipse cx={cx} cy={cy} rx={300} ry={230} fill="#ffffff" opacity={0.2 * flick} />
+				<ellipse cx={cx} cy={cy} rx={170} ry={130} fill="none" stroke="#8fa3e8" strokeWidth={10} />
+				{inner.map((p, i) => (
+					<g key={i}>
+						<line x1={p[0]} y1={p[1]} x2={p[0]} y2={p[1] - 130} stroke="#8c94ad" strokeWidth={9} />
+						<line x1={p[0]} y1={p[1] - 130} x2={inner[(i + 1) % 8][0]} y2={inner[(i + 1) % 8][1] - 130} stroke="#8c94ad" strokeWidth={6} opacity={0.8} />
+						<line x1={p[0]} y1={p[1]} x2={inner[(i + 1) % 8][0]} y2={inner[(i + 1) % 8][1]} stroke="#e7e9f2" strokeWidth={10} />
+					</g>
+				))}
+				<Crowd seed="vbot" x0={-60} x1={1140} y0={1700} y1={1900} n={30} f={f * 1.4} color="#02030a" up={1} />
+				{Array.from({length: 34}).map((_, i) => (
+					<circle key={i} cx={random('vd' + i) * W + Math.sin(f / 40 + i) * 20} cy={(random('ve' + i) * H + f * (0.4 + random('vf' + i) * 0.6)) % H} r={1.5 + random('vg' + i) * 2.6} fill="#aebcff" opacity={0.45} />
+				))}
+				{/* hall light flashes */}
+				<rect x={-200} y={-200} width={W + 400} height={H + 400} fill="#dfe8ff" opacity={0.07 * burst} />
+			</g>
+			{/* the credit over line 001: small, a third bigger than usual, first 3 seconds */}
 			<g opacity={titr}>
-				<rect x={100} y={110} width={880} height={176} rx={26} fill={NAVY} stroke="#ffc94a" strokeWidth={4} />
-				<text x={540} y={178} textAnchor="middle" fontSize={46} fontFamily={FONT} fontWeight={800} fill="#ffe9a8">
+				<rect x={100} y={TOP} width={880} height={176} rx={26} fill={NAVY} stroke="#ffc94a" strokeWidth={4} />
+				<text x={540} y={TOP + 68} textAnchor="middle" fontSize={46} fontFamily={FONT} fontWeight={800} fill="#ffe9a8">
 					В этой истории UFC
 				</text>
-				<text x={540} y={246} textAnchor="middle" fontSize={46} fontFamily={FONT} fontWeight={800} fill="#ffe9a8">
+				<text x={540} y={TOP + 136} textAnchor="middle" fontSize={46} fontFamily={FONT} fontWeight={800} fill="#ffe9a8">
 					руководит вымышленный герой
 				</text>
 			</g>
 			<g opacity={title} transform={`translate(0,${(1 - title) * 30})`}>
-				<rect x={110} y={110} width={860} height={310} rx={30} fill={NAVY} stroke="#ffc94a" strokeWidth={5} />
-				<text x={540} y={198} textAnchor="middle" fontSize={78} fontFamily={FONT} fontWeight={900} fill="#fff">
+				<rect x={100} y={TOP} width={880} height={300} rx={30} fill={NAVY} stroke="#ffc94a" strokeWidth={5} />
+				<text x={540} y={TOP + 86} textAnchor="middle" fontSize={76} fontFamily={FONT} fontWeight={900} fill="#fff">
 					ЧТО ЕСЛИ БЫ ТЕБЕ
 				</text>
-				<text x={540} y={290} textAnchor="middle" fontSize={78} fontFamily={FONT} fontWeight={900} fill="#fff">
+				<text x={540} y={TOP + 176} textAnchor="middle" fontSize={76} fontFamily={FONT} fontWeight={900} fill="#fff">
 					ОТДАЛИ UFC
 				</text>
-				<text x={540} y={382} textAnchor="middle" fontSize={78} fontFamily={FONT} fontWeight={900} fill="#ffe08a">
+				<text x={540} y={TOP + 266} textAnchor="middle" fontSize={76} fontFamily={FONT} fontWeight={900} fill="#ffe08a">
 					НА ОДИН ГОД?
 				</text>
 			</g>
-			<VPlate x={540} tip={795} s={1.3} fade={sp01(f, 6, 10)} />
+			<VPlate x={540} tip={865} s={1.56} fade={sp01(f, 6, 10)} />
 		</g>
 	);
 };
@@ -306,7 +330,7 @@ const ShotB: React.FC = () => {
 		<g>
 			<OfficeWall />
 			<Floor kind="wood" />
-			<MiniCal y={150} pos={7 * drag} snap={drag > 0.98 ? 1 : 0} />
+			<MiniCal y={TOP} s={0.95} pos={7 * drag} snap={drag > 0.98 ? 1 : 0} />
 			<Actor who="hero" x={540} floor={FEET} s={HSC} facing={1} faceTurn={0.2} look={[0.2, -0.6]} mouth={smile ? 'smile' : 'smirk'} pose={kp} uid="vh1" />
 			<VPlate x={540} />
 		</g>
@@ -324,15 +348,15 @@ const ShotC: React.FC = () => {
 		<g>
 			<OfficeWall />
 			<Floor kind="wood" />
-			<MiniCal y={125} s={0.76} pos={Math.max(0, pos)} snap={snap} />
-			<Cloud x={540} y={535} w={860} h={190} t={f - (T('005', 6) - t0)}>
-				<g transform="translate(-310,6)">
-					<TvLogo x={0} y={0} s={0.7} />
+			<MiniCal y={TOP} s={0.78} pos={Math.max(0, pos)} snap={snap} bare />
+			<Cloud x={540} y={512} w={860} h={148} t={f - (T('005', 6) - t0)}>
+				<g transform="translate(-318,6)">
+					<TvLogo x={0} y={0} s={0.55} />
 				</g>
-				<text x={90} y={-12} textAnchor="middle" fontSize={62} fontFamily={FONT} fontWeight={900} fill="#2a2f4a">
+				<text x={90} y={-6} textAnchor="middle" fontSize={54} fontFamily={FONT} fontWeight={900} fill="#2a2f4a">
 					ЭФИР СТОИТ.
 				</text>
-				<text x={90} y={58} textAnchor="middle" fontSize={62} fontFamily={FONT} fontWeight={900} fill="#d9372b">
+				<text x={90} y={52} textAnchor="middle" fontSize={54} fontFamily={FONT} fontWeight={900} fill="#d9372b">
 					ДАТА СТОИТ
 				</text>
 			</Cloud>
@@ -344,7 +368,7 @@ const ShotC: React.FC = () => {
 
 /* ------------------------------ D: «все двери закрыты» (078) ------------------------------ */
 const Door: React.FC<{x: number; y: number}> = ({x, y}) => (
-	<g transform={`translate(${x},${y})`}>
+	<g transform={`translate(${x},${y}) scale(0.8)`}>
 		<rect x={-130} y={0} width={260} height={470} rx={10} fill="#5a3a22" stroke="#0d0d1c" strokeWidth={6} />
 		<rect x={-100} y={34} width={200} height={170} rx={8} fill="#7a4f2e" />
 		<rect x={-100} y={236} width={200} height={190} rx={8} fill="#7a4f2e" />
@@ -359,13 +383,13 @@ const ShotD: React.FC = () => {
 	const t0 = SHOT_STARTS[3];
 	const slide = sp01(f, T('007', 14) - t0, 40);
 	const pose = blend(idle(gf, 3), {...SIT, lean: -10}, slide);
-	const seat = FEET - 157 * HSC + slide * (157 * HSC - 62);
+	const seat = FEET - 157 * HSC + slide * (157 * HSC - 52 * HSC);
 	return (
 		<g>
 			<OfficeWall night />
 			<Floor kind="nightwood" />
-			{[190, 540, 890].map((x) => (
-				<Door key={x} x={x} y={150} />
+			{[210, 540, 870].map((x) => (
+				<Door key={x} x={x} y={TOP} />
 			))}
 			<Actor who="hero" x={540} floor={FEET} seat={seat} s={HSC} facing={1} faceTurn={0.2} look={[0.2, 0.5]} expr="worried" mouth="frown" pose={pose} shadow={false} uid="vh3" />
 			<VPlate x={540} />
@@ -382,14 +406,14 @@ const ShotE: React.FC = () => {
 		<g>
 			<OfficeWall night />
 			<Floor kind="nightwood" />
-			<Cloud x={540} y={350} w={860} h={400} t={tc}>
+			<Cloud x={540} y={TOP + 190} w={860} h={380} t={tc}>
 				<g transform="translate(-300,-110)">
 					<TvLogo x={0} y={0} s={0.7} />
 				</g>
-				<text x={70} y={-70} textAnchor="middle" fontSize={68} fontFamily={FONT} fontWeight={900} fill="#d9372b">
+				<text x={70} y={-60} textAnchor="middle" fontSize={68} fontFamily={FONT} fontWeight={900} fill="#d9372b">
 					НЕТ ИМЕНИ —
 				</text>
-				<text x={0} y={25} textAnchor="middle" fontSize={68} fontFamily={FONT} fontWeight={900} fill="#2a2f4a">
+				<text x={0} y={30} textAnchor="middle" fontSize={68} fontFamily={FONT} fontWeight={900} fill="#2a2f4a">
 					НЕТ ЭФИРА.
 				</text>
 				<text x={0} y={120} textAnchor="middle" fontSize={68} fontFamily={FONT} fontWeight={900} fill="#2a2f4a">
@@ -402,52 +426,52 @@ const ShotE: React.FC = () => {
 	);
 };
 
-/* ------------------------------ F: the decision (092, 093, 094) ------------------------------ */
+/* ------------------------------ F: the decision (092, 093, 094): the dark office of 084 stays ------------------------------ */
 const ShotF: React.FC = () => {
 	const {f, gf} = useShot();
 	const t0 = SHOT_STARTS[5];
-	const pop = spring({frame: f - (T('009', 2) - t0), fps: 30, config: {damping: 12, stiffness: 150}});
+	const pop = spring({frame: f - (T('009', 2) - t0), fps: 30, config: {damping: 14, stiffness: 150}});
 	const plaque = sp01(f, T('009', 14) - t0, 10);
 	const btn = sp01(f, T('011', 6) - t0, 10);
 	const press = gf > T('011', 30) ? 0.94 : 1;
 	return (
 		<g>
-			<OfficeWall />
-			<Floor kind="wood" />
-			<g transform={`translate(540,360) scale(${0.6 + 0.4 * pop}) translate(-540,-360)`} opacity={Math.min(1, pop * 2)}>
-				<rect x={110} y={100} width={860} height={510} rx={30} fill={NAVY} stroke="#ffc94a" strokeWidth={6} />
-				<text x={540} y={186} textAnchor="middle" fontSize={64} fontFamily={FONT} fontWeight={900} fill="#ffe08a">
+			<OfficeWall night />
+			<Floor kind="nightwood" />
+			<g transform={`translate(540,${TOP + 190}) scale(${0.7 + 0.3 * Math.min(1, pop)}) translate(-540,${-(TOP + 190)})`} opacity={Math.min(1, pop * 2)}>
+				<rect x={110} y={TOP} width={860} height={380} rx={30} fill={NAVY} stroke="#ffc94a" strokeWidth={6} />
+				<text x={540} y={TOP + 66} textAnchor="middle" fontSize={56} fontFamily={FONT} fontWeight={900} fill="#ffe08a">
 					ГЛАВНЫЙ БОЙ
 				</text>
-				<Actor who="senya" x={320} floor={440} s={0.45} facing={1} faceTurn={0.4} look={[0.8, 0]} pose={idle(gf, 5)} shadow={false} uid="vsn" />
-				<Actor who="tayo" x={760} floor={440} s={0.45} facing={-1} faceTurn={0.4} look={[-0.8, 0]} pose={idle(gf, 6)} shadow={false} uid="vty" />
-				<text x={320} y={512} textAnchor="middle" fontSize={56} fontFamily={FONT} fontWeight={900} fill="#fff">
+				<Actor who="senya" x={320} floor={TOP + 222} s={0.36} facing={1} faceTurn={0.4} look={[0.8, 0]} pose={idle(gf, 5)} shadow={false} uid="vsn" />
+				<Actor who="tayo" x={760} floor={TOP + 222} s={0.36} facing={-1} faceTurn={0.4} look={[-0.8, 0]} pose={idle(gf, 6)} shadow={false} uid="vty" />
+				<text x={320} y={TOP + 276} textAnchor="middle" fontSize={52} fontFamily={FONT} fontWeight={900} fill="#fff">
 					СЕНЯ
 				</text>
-				<text x={760} y={512} textAnchor="middle" fontSize={56} fontFamily={FONT} fontWeight={900} fill="#fff">
+				<text x={760} y={TOP + 276} textAnchor="middle" fontSize={52} fontFamily={FONT} fontWeight={900} fill="#fff">
 					ТАЙО
 				</text>
 				<g opacity={plaque} transform={`translate(0,${(1 - plaque) * 24})`}>
-					<rect x={140} y={528} width={800} height={64} rx={14} fill="#d9372b" />
-					<text x={540} y={576} textAnchor="middle" fontSize={52} fontFamily={FONT} fontWeight={900} fill="#fff">
+					<rect x={140} y={TOP + 298} width={800} height={64} rx={14} fill="#d9372b" />
+					<text x={540} y={TOP + 346} textAnchor="middle" fontSize={52} fontFamily={FONT} fontWeight={900} fill="#fff">
 						НИКОМУ НЕ ИЗВЕСТНЫ
 					</text>
 				</g>
 			</g>
-			<g opacity={btn} transform={`translate(740,664) scale(${press}) translate(-740,-664)`}>
-				<rect x={500} y={626} width={480} height={76} rx={38} fill="#1f9d55" stroke="#0d0d1c" strokeWidth={5} />
-				<text x={740} y={682} textAnchor="middle" fontSize={52} fontFamily={FONT} fontWeight={900} fill="#fff">
+			<g opacity={btn} transform={`translate(740,${TOP + 440}) scale(${press}) translate(-740,${-(TOP + 440)})`}>
+				<rect x={520} y={TOP + 404} width={440} height={72} rx={36} fill="#1f9d55" stroke="#0d0d1c" strokeWidth={5} />
+				<text x={740} y={TOP + 456} textAnchor="middle" fontSize={50} fontFamily={FONT} fontWeight={900} fill="#fff">
 					ОТПРАВИТЬ
 				</text>
 			</g>
 			<Actor who="hero" x={300} floor={FEET} s={HSC} facing={1} faceTurn={0.25} look={[0.5, -0.4]} mouth={gf > T('011') ? 'smirk' : 'open'} pose={gesture('presentF', idle(gf, 3), sp01(f, T('009', 6) - t0, 10) * (gf < T('011') ? 1 : 0), gf)} uid="vh5" />
 			<VPlate x={300} />
-			<Actor who="irma" x={780} floor={FEET} s={1.0} facing={-1} faceTurn={0.25} look={[-0.4, 0.2]} expr={gf >= T('010') ? 'wide' : 'normal'} mouth="flat" pose={idle(gf, 1)} uid="vi5" />
+			<Actor who="irma" x={780} floor={FEET} s={1.4} facing={-1} faceTurn={0.25} look={[-0.4, 0.2]} expr={gf >= T('010') ? 'wide' : 'normal'} mouth="flat" pose={idle(gf, 1)} uid="vi5" />
 		</g>
 	);
 };
 
-/* ------------------------------ G: the hall chants (121) ------------------------------ */
+/* ------------------------------ G: the hall chants (121), then the phone and the channel's cloud (125) ------------------------------ */
 const Chant: React.FC<{x: number; y: number; t: string; k: number; size: number; rot: number}> = ({x, y, t, k, size, rot}) =>
 	k <= 0 ? null : (
 		<g transform={`translate(${x},${y}) rotate(${rot}) scale(${0.6 + 0.4 * Math.min(1, k * 2)})`} opacity={Math.min(1, k * 2.5)}>
@@ -459,57 +483,49 @@ const Chant: React.FC<{x: number; y: number; t: string; k: number; size: number;
 const ShotG: React.FC = () => {
 	const {f, gf} = useShot();
 	const t0 = SHOT_STARTS[6];
+	const tNext = T('013') - 4 - t0; // the chants make room for the channel's cloud
+	const chants = 1 - sp01(f, tNext - 8, 8);
+	const tc = f - (T('013', 8) - t0);
+	const wipe = sp01(f, T('013', 6) - t0, 10);
 	return (
 		<g>
 			<ArenaWall up={1} />
 			<Floor kind="mat" />
-			<Chant x={540} y={330} t="СЕ-НЯ!" k={sp01(f, T('012', 10) - t0, 8)} size={170} rot={-4} />
-			<Chant x={540} y={520} t="СЕ-НЯ!" k={sp01(f, T('012', 44) - t0, 8)} size={130} rot={3} />
-			<Actor who="hero" x={290} floor={FEET} s={HSC} facing={1} faceTurn={0.3} look={[0.6, -0.2]} mouth="open" pose={gesture('fist', idle(gf, 3), 0.8, gf)} uid="vh6" />
-			<VPlate x={290} />
-			<Actor who="senya" x={590} floor={FEET} s={HSC} facing={1} faceTurn={0.3} look={[0.2, -0.5]} mouth="smile" pose={gesture('wave', idle(gf, 5), 1, gf)} uid="vs6" />
-			<Actor who="tayo" x={880} floor={FEET} s={HSC} facing={-1} faceTurn={0.3} look={[-0.4, -0.4]} mouth="smile" pose={gesture('wave', idle(gf, 6), 1, gf + 7)} uid="vt6" />
-		</g>
-	);
-};
-
-/* ------------------------------ H: «Это Сеня» + the question (125, 126) ------------------------------ */
-const ShotH: React.FC = () => {
-	const {f, gf} = useShot();
-	const t0 = SHOT_STARTS[7];
-	const tc = f - (T('013', 8) - t0);
-	const out = interpolate(gf, [CARD0 - 24, CARD0 - 6], [1, 0], clamp);
-	const wipe = sp01(f, T('013', 6) - t0, 10) * (1 - sp01(f, T('014', 6) - t0, 12));
-	return (
-		<g>
-			<ArenaWall up={0.3} />
-			<Floor kind="mat" />
-			<Cloud x={540} y={290} w={880} h={290} t={tc}>
+			<g opacity={chants}>
+				<Chant x={540} y={TOP + 170} t="СЕ-НЯ!" k={sp01(f, T('012', 10) - t0, 8)} size={170} rot={-4} />
+				<Chant x={540} y={TOP + 350} t="СЕ-НЯ!" k={sp01(f, T('012', 44) - t0, 8)} size={120} rot={3} />
+			</g>
+			<Cloud x={540} y={TOP + 140} w={880} h={280} t={tc}>
 				<g transform="translate(-350,8)">
 					<TvLogo x={0} y={0} s={0.7} />
 				</g>
-				<text x={100} y={-10} textAnchor="middle" fontSize={56} fontFamily={FONT} fontWeight={900} fill="#2a2f4a">
+				<text x={100} y={-6} textAnchor="middle" fontSize={56} fontFamily={FONT} fontWeight={900} fill="#2a2f4a">
 					РЕКОРДНЫЙ ЭФИР.
 				</text>
-				<text x={100} y={64} textAnchor="middle" fontSize={56} fontFamily={FONT} fontWeight={900} fill="#d9372b">
+				<text x={100} y={66} textAnchor="middle" fontSize={56} fontFamily={FONT} fontWeight={900} fill="#d9372b">
 					ПРОДЛЕВАЕМ.
 				</text>
 			</Cloud>
-			<Actor who="hero" x={300} floor={FEET} s={HSC} facing={1} faceTurn={0.25} look={[0.7, -0.3]} mouth="smile" expr="normal" pose={gesture('touchFace', idle(gf, 3), wipe, gf)} uid="vh7" />
-			<VPlate x={300} fade={out} />
+			<Actor who="hero" x={330} floor={FEET} s={HSC} facing={1} faceTurn={0.3} look={[0.6, -0.2]} mouth={gf < T('013') ? 'open' : 'smile'} pose={gf < T('013') ? gesture('fist', idle(gf, 3), 0.8, gf) : gesture('touchFace', idle(gf, 3), wipe, gf)} uid="vh6" />
+			<VPlate x={330} />
+			<Actor who="senya" x={730} floor={FEET} s={HSC} facing={-1} faceTurn={0.3} look={[-0.3, -0.5]} mouth="smile" pose={gesture('wave', idle(gf, 5), 1, gf)} uid="vs6" />
 		</g>
 	);
 };
 
-/* ------------------------------ I: the final card (3 s) ------------------------------ */
+/* ------------------------------ final card: takes over BEFORE line 126 starts and holds to the end ------------------------------ */
 const ShotCard: React.FC = () => {
 	const {f, gf} = useShot();
-	const k = spring({frame: f, fps: 30, config: {damping: 14, stiffness: 130}});
 	const cx = 540;
-	const cy = 1200;
-	const outer = octPts(cx, cy, 470, 340);
-	const inner = octPts(cx, cy, 380, 275);
-	const flick = 0.9 + 0.1 * Math.sin(f / 3);
+	const cy = 1085;
+	const outer = octPts(cx, cy, 430, 235);
+	const inner = octPts(cx, cy, 345, 190);
+	const burst = Math.max(0, Math.sin(f / 3.1) * Math.sin(f / 7.3));
+	const flick = 0.85 + 0.15 * Math.sin(f / 3) + 0.2 * burst;
+	const beam = 7 * Math.sin(f / 40);
+	const breathe = 1 + 0.012 * Math.sin(f / 14);
+	const pill = sp01(f, 50, 14); // the channel line arrives while the question is being asked
+	const push = 1 + 0.06 * interpolate(f, [0, SHORT_TOTAL - CARD0], [0, 1], clamp);
 	return (
 		<g>
 			<defs>
@@ -518,39 +534,48 @@ const ShotCard: React.FC = () => {
 					<stop offset="1" stopColor="#05060f" />
 				</radialGradient>
 			</defs>
-			<rect x={-60} y={-60} width={W + 120} height={H + 120} fill="url(#cardbg)" />
-			<polygon points="480,700 600,700 860,1200 220,1200" fill="#fff" opacity={0.12 * flick} />
-			<Crowd seed="vcard" x0={-60} x1={1140} y0={1620} y1={1860} n={22} f={gf} color="#02030a" up={0.9} />
-			<polygon points={ptsOf(outer)} fill="#1b1f33" />
-			<polygon points={ptsOf(inner)} fill="#cfd3e4" />
-			<ellipse cx={cx} cy={cy} rx={250} ry={170} fill="#fff" opacity={0.28 * flick} />
-			{inner.map((p, i) => (
-				<g key={i}>
-					<line x1={p[0]} y1={p[1]} x2={p[0]} y2={p[1] - 110} stroke="#8c94ad" strokeWidth={8} />
-					<line x1={p[0]} y1={p[1] - 110} x2={inner[(i + 1) % 8][0]} y2={inner[(i + 1) % 8][1] - 110} stroke="#8c94ad" strokeWidth={6} opacity={0.8} />
-					<line x1={p[0]} y1={p[1]} x2={inner[(i + 1) % 8][0]} y2={inner[(i + 1) % 8][1]} stroke="#e7e9f2" strokeWidth={9} />
+			<g transform={`translate(540,1100) scale(${push}) translate(-540,-1100)`}>
+				<rect x={-200} y={-200} width={W + 400} height={H + 400} fill="url(#cardbg)" />
+				<g transform={`rotate(${beam} 540 700)`}>
+					<polygon points="470,700 610,700 880,1200 200,1200" fill="#fff" opacity={0.12 * flick} />
 				</g>
-			))}
-			<g opacity={k} transform={`translate(0,${(1 - k) * 40})`}>
-				<text x={540} y={190} textAnchor="middle" fontSize={100} fontFamily={FONT} fontWeight={900} fill="#fff" stroke="#05060f" strokeWidth={12} paintOrder="stroke">
+				<Crowd seed="vcard" x0={-60} x1={1140} y0={1560} y1={1880} n={34} f={gf * 1.3} color="#02030a" up={1} />
+				<polygon points={ptsOf(outer)} fill="#1b1f33" />
+				<polygon points={ptsOf(inner)} fill="#cfd3e4" />
+				<ellipse cx={cx} cy={cy} rx={230} ry={120} fill="#fff" opacity={0.28 * flick} />
+				{inner.map((p, i) => (
+					<g key={i}>
+						<line x1={p[0]} y1={p[1]} x2={p[0]} y2={p[1] - 100} stroke="#8c94ad" strokeWidth={8} />
+						<line x1={p[0]} y1={p[1] - 100} x2={inner[(i + 1) % 8][0]} y2={inner[(i + 1) % 8][1] - 100} stroke="#8c94ad" strokeWidth={6} opacity={0.8} />
+						<line x1={p[0]} y1={p[1]} x2={inner[(i + 1) % 8][0]} y2={inner[(i + 1) % 8][1]} stroke="#e7e9f2" strokeWidth={9} />
+					</g>
+				))}
+				<rect x={-200} y={-200} width={W + 400} height={H + 400} fill="#dfe8ff" opacity={0.05 * burst} />
+			</g>
+			{/* the whole question is on screen from the first frame of line 126 */}
+			<g transform={`translate(540,420) scale(${breathe}) translate(-540,-420)`}>
+				<text x={540} y={290} textAnchor="middle" fontSize={100} fontFamily={FONT} fontWeight={900} fill="#fff" stroke="#05060f" strokeWidth={12} paintOrder="stroke">
 					КОГО ТЫ
 				</text>
-				<text x={540} y={300} textAnchor="middle" fontSize={100} fontFamily={FONT} fontWeight={900} fill="#fff" stroke="#05060f" strokeWidth={12} paintOrder="stroke">
+				<text x={540} y={400} textAnchor="middle" fontSize={100} fontFamily={FONT} fontWeight={900} fill="#fff" stroke="#05060f" strokeWidth={12} paintOrder="stroke">
 					ПОСТАВИШЬ
 				</text>
-				<text x={540} y={420} textAnchor="middle" fontSize={92} fontFamily={FONT} fontWeight={900} fill="#ffe08a" stroke="#05060f" strokeWidth={12} paintOrder="stroke">
+				<text x={540} y={516} textAnchor="middle" fontSize={92} fontFamily={FONT} fontWeight={900} fill="#ffe08a" stroke="#05060f" strokeWidth={12} paintOrder="stroke">
 					В ГЛАВНЫЙ БОЙ?
 				</text>
-				<text x={540} y={540} textAnchor="middle" fontSize={58} fontFamily={FONT} fontWeight={800} fill="#cfd6ff">
+				<text x={540} y={620} textAnchor="middle" fontSize={56} fontFamily={FONT} fontWeight={800} fill="#cfd6ff">
 					ТОГО, КОГО ЗНАЮТ,
 				</text>
-				<text x={540} y={612} textAnchor="middle" fontSize={58} fontFamily={FONT} fontWeight={800} fill="#cfd6ff">
-					ИЛИ КТО ГОТОВ ВСЕГДА?
+				<text x={540} y={688} textAnchor="middle" fontSize={56} fontFamily={FONT} fontWeight={800} fill="#cfd6ff">
+					ИЛИ ТОГО, КТО
+				</text>
+				<text x={540} y={756} textAnchor="middle" fontSize={56} fontFamily={FONT} fontWeight={800} fill="#cfd6ff">
+					ГОТОВ ВСЕГДА?
 				</text>
 			</g>
-			<g opacity={sp01(f, 20, 14)}>
-				<rect x={110} y={1560} width={860} height={120} rx={36} fill={NAVY} stroke="#ffc94a" strokeWidth={5} />
-				<text x={540} y={1636} textAnchor="middle" fontSize={52} fontFamily={FONT} fontWeight={800} fill="#ffe9a8">
+			<g opacity={pill}>
+				<rect x={90} y={1330} width={780} height={100} rx={32} fill={NAVY} stroke="#ffc94a" strokeWidth={5} />
+				<text x={480} y={1396} textAnchor="middle" fontSize={50} fontFamily={FONT} fontWeight={800} fill="#ffe9a8">
 					Полная история на канале
 				</text>
 			</g>
@@ -559,10 +584,8 @@ const ShotCard: React.FC = () => {
 };
 
 /* ------------------------------ assembly ------------------------------ */
-const SHOTS: React.FC[] = [ShotA, ShotB, ShotC, ShotD, ShotE, ShotF, ShotG, ShotH, ShotCard];
+const SHOTS: React.FC[] = [ShotA, ShotB, ShotC, ShotD, ShotE, ShotF, ShotG, ShotCard];
 export const ShortV: React.FC = () => {
-	const {fps} = useVideoConfig();
-	void fps;
 	return (
 		<TalkOverride.Provider value={(sp, gf) => talkAt(sp, gf)}>
 			{SHOTS.map((C, i) => {

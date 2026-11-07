@@ -1,19 +1,19 @@
 name: render
 
 # Ручной запуск: рендерит Long (16:9) или Short (9:16) параллельной матрицей кусков и склеивает в один mp4.
-# Short собран из озвучки лонга (src/story/short-timeline.json, реплики шортса 001–011), свой звук — src/story/short-sound.json.
+# Short собран из озвучки лонга (src/story/short-timeline.json, 14 реплик, 1633 кадра = 54,4 с), свой звук — src/story/short-sound.json.
 # Ключи и .env не нужны: озвучка лежит в public/vo/, шрифты — в public/fonts/.
 on:
   workflow_dispatch:
     inputs:
       composition:
-        description: 'Композиция: Long (16:9, 13–15 мин) или Short (9:16, ~59 с)'
+        description: 'Композиция: Long (16:9, 8:42) или Short (9:16, 54,4 с)'
         type: choice
         options: [Long, Short]
         required: true
         default: Long
       range:
-        description: 'Диапазон: lines:001-025 (номера реплик) или frames:0-3212 (кадры). Long весь ролик: lines:001-126; Short весь ролик: lines:001-011 (номера реплик шортса)'
+        description: 'Диапазон: lines:001-025 (номера реплик) или frames:0-3212 (кадры). Long весь ролик: lines:001-126; Short весь ролик: frames:0-1632 (chunk 165)'
         required: true
         default: 'lines:001-025'
       chunk:

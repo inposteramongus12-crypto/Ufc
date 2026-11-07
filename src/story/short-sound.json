@@ -27,15 +27,15 @@
   },
   {
    "from": "012",
-   "to": "013",
+   "to": "014",
    "kind": "crowd",
-   "gain": 0.08
+   "gain": 0.07
   },
   {
-   "from": "013",
+   "from": "014",
    "to": "end",
    "kind": "crowd",
-   "gain": 0.035
+   "gain": 0.03
   }
  ],
  "music": [],
@@ -95,13 +95,6 @@
   },
   {
    "at": "012",
-   "off": -11,
-   "type": "whoosh",
-   "dur": 0.8,
-   "amp": 0.12
-  },
-  {
-   "at": "013",
    "off": -11,
    "type": "whoosh",
    "dur": 0.8,
@@ -463,19 +456,14 @@
   },
   {
    "at": "014",
-   "off": 115,
-   "type": "switch"
-  },
-  {
-   "at": "014",
-   "off": 122,
+   "off": -14,
    "type": "whoosh",
    "dur": 0.8,
    "amp": 0.12
   },
   {
    "at": "014",
-   "off": 133,
+   "off": -3,
    "type": "ding",
    "amp": 0.12
   }

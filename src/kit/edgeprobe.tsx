@@ -36,6 +36,12 @@ export const probe = (frame: number) => {
 		return null;
 	};
 	const box = (r: DOMRect) => [Math.round(r.left), Math.round(r.top), Math.round(r.right), Math.round(r.bottom)];
+	// vertical video (Shorts): the platform's interface covers the top 150 px, the bottom 380 px and the right side below the middle
+	const portrait = H > W;
+	const uiZone = (r: DOMRect) => {
+		if (!portrait || r.right < 0 || r.bottom < 0 || r.left > W || r.top > H) return '';
+		return [r.top < 150 ? 'top150' : '', r.bottom > H - 380 ? 'bottom380' : '', r.bottom > H / 2 + 30 && r.right > 975 ? 'right-low' : ''].filter(Boolean).join('+');
+	};
 	// text
 	const tw = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
 	for (let n = tw.nextNode(); n; n = tw.nextNode()) {
@@ -51,6 +57,8 @@ export const probe = (frame: number) => {
 		if (op < 0.25) continue;
 		const c = classify(r, 16);
 		if (c) issues.push({kind: c.kind, what: 'text «' + t.slice(0, 40) + '»', box: box(r), side: c.side});
+		const uz = op >= 0.5 ? uiZone(r) : '';
+		if (uz) issues.push({kind: 'ui-zone', what: 'text «' + t.slice(0, 40) + '»', box: box(r), side: uz});
 		// covered?
 		if (op < 0.5) continue;
 		let hits = 0;
@@ -137,6 +145,8 @@ export const probe = (frame: number) => {
 		if (r.width < 140 || r.height < 56 || effOpacity(e) < 0.4) return;
 		const c = classify(r, 0);
 		if (c) issues.push({kind: c.kind, what: 'panel', box: box(r), side: c.side});
+		const uz = uiZone(r);
+		if (uz) issues.push({kind: 'ui-zone', what: 'panel', box: box(r), side: uz});
 	});
 	// actors
 	document.querySelectorAll('[data-actor]').forEach((e) => {
@@ -147,6 +157,7 @@ export const probe = (frame: number) => {
 		// a close-up may crop legs / chairs at the bottom; the head side (left, right, top) must not be cut
 		const sideCut = r.left < -2 || r.right > W + 2 || r.top < -2;
 		if (sideCut && frac > 0.03 && frac < 0.6) issues.push({kind: 'actor-cut', what: e.getAttribute('data-actor') ?? 'actor', box: box(r)});
+		if (portrait && r.right > 990 && r.bottom > H / 2 + 30 && effOpacity(e) >= 0.4) issues.push({kind: 'ui-zone', what: 'actor ' + (e.getAttribute('data-actor') ?? ''), box: box(r), side: 'right-low'});
 		// a plate / board / panel lying over the actor's upper body (face, hair, lamp)
 		let hid = 0;
 		let hidBy = '';
